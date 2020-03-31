@@ -10,8 +10,8 @@
 
 #include <stdbool.h>
 
-void helper(int exit_status);
-void input_error_handling(int ac, char **av);
-void raise_error(bool err, const char *msg);
+void helper(const char *, int);
+void input_error_handling(int, char **);
+void raise_error(bool, const char *);
 
 #endif /* !ERROR_H_ */

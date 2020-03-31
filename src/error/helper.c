@@ -8,10 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void helper(int exit_status)
+void helper(const char *prg_name, int exit_status)
 {
-    puts("USAGE: .myftp port patch");
-    puts("\tport is the port number on which the server socket listens");
-    puts("\tpath is the path to the home directory for the Anonymous user");
+    dprintf(1, "USAGE: %s port path\n", prg_name);
+    dprintf(1, "\tport is the port number on which the server socket listens\n");
+    dprintf(1, "\tpath is the path to the home directory for the Anonymous user\n");
     exit(exit_status);
 }

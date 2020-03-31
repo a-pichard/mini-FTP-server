@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include "error.h"
+#include "errors.h"
 
 static struct sockaddr_in get_default_sin(int port)
 {

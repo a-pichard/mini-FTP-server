@@ -28,8 +28,8 @@ typedef struct {
     int nb_client;
 } server_t;
 
-void init_server(server_t *server, int port, const char *);
-void destroy_server(server_t *server);
-int init_main_server_socket(int port);
+void init_server(server_t *, int, const char *);
+void destroy_server(server_t *);
+int init_main_server_socket(int);
 
 #endif /* !SERVER_H_ */

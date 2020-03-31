@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "error.h"
+#include "errors.h"
 #include "server.h"
 #include <stdlib.h>
 
