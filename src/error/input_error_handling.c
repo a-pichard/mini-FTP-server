@@ -7,10 +7,9 @@
 
 #include "error.h"
 #include <string.h>
-#include <stdbool.h>
 #include <unistd.h>
 
-bool isStrDigit(const char *str)
+static bool isStrDigit(const char *str)
 {
     int i = 0;
 
