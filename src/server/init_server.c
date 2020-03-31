@@ -9,6 +9,7 @@
 #include "error.h"
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 static void init_users(server_t *server, const const char *anonymous_home)
 {
@@ -42,4 +43,5 @@ void destroy_server(server_t *server)
         free(server->users);
     if (server->clients != NULL)
         free(server->clients);
+    close(server->server_fd);
 }
