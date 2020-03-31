@@ -5,10 +5,10 @@
 ** init_socket
 */
 
-#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include "errors.h"
+#include "server.h"
 
 static struct sockaddr_in get_default_sin(int port)
 {
@@ -29,7 +29,7 @@ int init_main_server_socket(int port)
     raise_error(fd != -1, "socket() ");
     ret = bind(fd, (struct sockaddr *)(&sin), sizeof(sin));
     raise_error(ret != -1, "bind() ");
-    ret = listen(fd, 5);
+    ret = listen(fd, MAX_CLIENTS_QUEUE);
     raise_error(ret != -1, "listen() ");
     return (fd);
 }

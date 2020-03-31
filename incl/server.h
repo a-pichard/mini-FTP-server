@@ -8,6 +8,10 @@
 #ifndef SERVER_H_
 #define SERVER_H_
 
+#define MAX_CLIENTS_QUEUE 5
+
+#include <arpa/inet.h>
+
 typedef struct {
     char *username;
     char *password;
@@ -16,7 +20,7 @@ typedef struct {
 
 typedef struct {
     int fd;
-    int fd_data;
+    struct sockaddr_in client_info;
 } client_t;
 
 typedef struct {
@@ -31,5 +35,6 @@ typedef struct {
 void init_server(server_t *, int, const char *);
 void destroy_server(server_t *);
 int init_main_server_socket(int);
+void run_server(server_t *);
 
 #endif /* !SERVER_H_ */

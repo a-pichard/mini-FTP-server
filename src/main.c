@@ -15,7 +15,7 @@ int main(int ac, char **av)
 
     input_error_handling(ac, av);
     init_server(&serv, atoi(av[1]), av[2]);
-    // do stuff
+    run_server(&serv);
     destroy_server(&serv);
     return (0);
 }
