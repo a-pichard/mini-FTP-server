@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 static int reset_selected_fd(server_t *server, fd_set *rset)
 {
     int max_fd = server->server_fd;
@@ -43,6 +45,8 @@ static void accept_new_client_connection(server_t *server)
     raise_error(client_sock != -1, "accept() ");
     server->clients[idx].fd = client_sock;
     write(client_sock, "220 Welcome bro\n", 17);
+
+    dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd);
 }
 
 void run_server(server_t *server)

@@ -13,9 +13,10 @@
 
 static void client_request(server_t *serv, int client_id, int ret, char *req)
 {
+    if (ret == 0) {
+        return disconnect_client(serv, client_id);
+    }
     dprintf(1, "Client with fd %d said: %s", serv->clients[client_id].fd, req);
-    if (ret == 0)
-        disconnect_client(serv, client_id);
 }
 
 void handle_client(fd_set *rset, server_t *server)

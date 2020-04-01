@@ -11,6 +11,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <stdio.h>
+
 void disconnect_client(server_t *server, int id)
 {
     int old_idx = 0;
@@ -27,6 +29,7 @@ void disconnect_client(server_t *server, int id)
         old_idx++;
     }
     server->nb_client -= 1;
+    dprintf(1, "User with fd %d disconnected\n", server->clients[id].fd);
     free(server->clients);
     server->clients = clients;
 }
