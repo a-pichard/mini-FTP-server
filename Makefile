@@ -9,11 +9,12 @@ SRC	=	src/main.c	\
 		src/error/helper.c	\
 		src/error/input_error_handling.c	\
 		src/error/raise_error.c	\
-		src/server/init_server.c	\
-		src/server/init_socket.c	\
+		src/init/init_server.c	\
+		src/init/init_socket.c	\
 		src/server/server.c	\
 		src/server/handle_client.c	\
-		src/server/client_utils.c
+		src/server/client_utils.c	\
+		src/cmd/user.c
 
 OBJ	=	$(SRC:.c=.o)
 

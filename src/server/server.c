@@ -7,13 +7,7 @@
 
 #include "server.h"
 #include "errors.h"
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#include <stdio.h>
+#include <stddef.h>
 
 static int reset_selected_fd(server_t *server, fd_set *rset)
 {
@@ -27,26 +21,6 @@ static int reset_selected_fd(server_t *server, fd_set *rset)
             max_fd = server->clients[i].fd;
     }
     return (max_fd + 1);
-}
-
-static void accept_new_client_connection(server_t *server)
-{
-    socklen_t size;
-    int client_sock;
-    int idx = server->nb_client;
-    struct sockaddr *client_info;
-
-    server->clients = realloc(server->clients, sizeof(client_t) * (idx + 1));
-    raise_error(server->clients != NULL, "realloc()) ");
-    server->nb_client += 1;
-    size = sizeof(server->clients[idx].client_info);
-    client_info = (struct sockaddr *)(&server->clients[idx].client_info);
-    client_sock = accept(server->server_fd, client_info, &size);
-    raise_error(client_sock != -1, "accept() ");
-    server->clients[idx].fd = client_sock;
-    write(client_sock, "220 Welcome bro\n", 17);
-
-    dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd);
 }
 
 void run_server(server_t *server)
