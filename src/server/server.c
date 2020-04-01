@@ -11,6 +11,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+#include <stdio.h>
 
 static int reset_selected_fd(server_t *server, fd_set *rset)
 {
@@ -23,7 +26,7 @@ static int reset_selected_fd(server_t *server, fd_set *rset)
         if (server->clients[i].fd > max_fd)
             max_fd = server->clients[i].fd;
     }
-    return (max_fd);
+    return (max_fd + 1);
 }
 
 static void accept_new_client_connection(server_t *server)
@@ -37,12 +40,12 @@ static void accept_new_client_connection(server_t *server)
     server->clients = realloc(server->clients, sizeof(client_t) * (idx + 1));
     raise_error(server->clients != NULL, "realloc()) ");
     server->nb_client += 1;
-    size = sizeof(server->clients[server->nb_client - 1].client_info);
+    size = sizeof(server->clients[idx].client_info);
     client_info = (struct sockaddr *)(&server->clients[idx].client_info);
     fd = accept(server->server_fd, client_info, &size);
     raise_error(client_sock != -1, "accept() ");
     server->clients[idx].fd = fd;
-    // fprintf(stdout, "Connection from %s:%u\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port));
+    write(fd, "220 Welcome bro\n", 17);
 }
 
 void run_server(server_t *server)
@@ -50,14 +53,20 @@ void run_server(server_t *server)
     int max_fd;
     int nb_fd_ready;
     fd_set rset;
+    client_t *client;
 
     while (1) {
         max_fd = reset_selected_fd(server, &rset);
         nb_fd_ready = select(max_fd, &rset, NULL, NULL, NULL);
-        // reste bloqué
         raise_error(nb_fd_ready != -1, "select() ");
         if (FD_ISSET(server->server_fd, &rset)) {
             accept_new_client_connection(server);
+            FD_CLR(server->server_fd, &rset);
+            nb_fd_ready--;
+        }
+        while (nb_fd_ready > 0) {
+            handle_client(&rset, server);
+            nb_fd_ready--;
         }
     }
 }

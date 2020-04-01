@@ -9,8 +9,10 @@
 #define SERVER_H_
 
 #define MAX_CLIENTS_QUEUE 5
+#define BUFFER_READ_SIZE 4096
 
 #include <arpa/inet.h>
+#include <sys/select.h>
 
 typedef struct {
     char *username;
@@ -35,6 +37,11 @@ typedef struct {
 void init_server(server_t *, int, const char *);
 void destroy_server(server_t *);
 int init_main_server_socket(int);
+
+void handle_client(fd_set *, server_t *);
+
+void disconnect_client(server_t *, int);
+
 void run_server(server_t *);
 
 #endif /* !SERVER_H_ */

@@ -11,7 +11,9 @@ SRC	=	src/main.c	\
 		src/error/raise_error.c	\
 		src/server/init_server.c	\
 		src/server/init_socket.c	\
-		src/server/server.c
+		src/server/server.c	\
+		src/server/handle_client.c	\
+		src/server/client_utils.c
 
 OBJ	=	$(SRC:.c=.o)
 
