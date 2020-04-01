@@ -10,6 +10,6 @@
 
 #include "server.h"
 
-void user(const char *, client_t *, user_t *, int);
+void user(const char *, client_t *);
 
 #endif /* !CMD_H_ */

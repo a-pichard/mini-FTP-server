@@ -29,66 +29,45 @@ void accept_new_client_connection(server_t *server)
     client_sock = accept(server->server_fd, client_info, &size);
     raise_error(client_sock != -1, "accept() ");
     server->clients[idx].fd = client_sock;
-    server->clients[idx].req = NULL;
     server->clients[idx].username = NULL;
-    server->clients[idx].passwd = NULL;
     server->clients[idx].is_logged = false;
     write(client_sock, "220 Service ready for new user.\r\n", 34);
-    dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd);
+    dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd); //debug
 }
 
-static char *my_strcat(char *s1, const char *s2)
-{
-    int len1 = strlen(s1);
-    int len2 = strlen(s2);
-    char *result = malloc(sizeof(char) * (len1 + len2 + 1));
-    int i = 0;
-    int j = 0;
-
-    raise_error(result != NULL, "malloc() ");
-    for (i = 0; i < len1; i++)
-        result[i] = s1[i];
-    for (j = 0; j < len2; j++)
-        result[i + j] = s2[j];
-    result[i + j] = '\0';
-    free(s1);
-    return (result);
-}
-
-char *is_req_valid(const char *req, client_t *client)
+static void parse_cmd(const char *req, char **cmd, char **data)
 {
     int len = strlen(req);
-    char *rqst;
+    char *tmp;
+    int sep;
 
-    if (len >= 2 && req[len - 2] == '\r' && req[len - 1] == '\n') {
-        if (client->req == NULL)
-            return (strdup(req));
-        else {
-            rqst = my_strcat(client->req, req);
-            client->req = NULL;
-            return (rqst);
-        }
+    if (!(len >= 2 && req[len - 2] == '\r' && req[len - 1] == '\n'))
+        return;
+    tmp = strchr(req, ' ');
+    if (tmp != NULL) {
+        sep = (int)(tmp - req);
+        *cmd = strndup(req, sep);
+        *data = strndup(&req[sep + 1], strlen(&req[sep + 1]) - 2);
     } else {
-        if (client->req == NULL)
-            client->req = strdup(req);
-        else
-            client->req = my_strcat(client->req, req);
-        return (NULL);
+        *cmd = strndup(req, strlen(req) - 2);
     }
 }
 
 static void client_request(server_t *serv, int id, int ret, const char *req)
 {
-    char *rqst = NULL;
+    char *cmd = NULL;
+    char *data = NULL;
 
     if (ret == 0)
         return disconnect_client(serv, id);
-    rqst = is_req_valid(req, &serv->clients[id]);
-    if (!rqst)
+    parse_cmd(req, &cmd, &data);
+    if (cmd == NULL && data == NULL)
         return;
-    dprintf(1, "Client with fd %d said: %s", serv->clients[id].fd, rqst);
-    if (!strncmp(rqst, "USER", 4))
-        return user(rqst, &serv->clients[id], serv->users, serv->nb_users);
+    dprintf(1, "Client with fd %d said: \"%s\" --> \"%s\"\n", serv->clients[id].fd, cmd, data ? data : "NULL"); // debug
+    if (!strncmp(cmd, "USER", 4))
+        user(data, &serv->clients[id]);
+    free(cmd);
+    free(data);
 }
 
 void handle_client(fd_set *rset, server_t *server)

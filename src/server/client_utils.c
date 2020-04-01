@@ -29,7 +29,7 @@ void disconnect_client(server_t *server, int id)
         old_idx++;
     }
     server->nb_client -= 1;
-    dprintf(1, "User with fd %d disconnected\n", server->clients[id].fd);
+    dprintf(1, "User with fd %d disconnected\n", server->clients[id].fd); // debug
     free(server->clients);
     server->clients = clients;
 }

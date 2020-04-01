@@ -24,9 +24,7 @@ typedef struct {
 typedef struct {
     int fd;
     struct sockaddr_in client_info;
-    char *req;
     char *username;
-    char *passwd;
     bool is_logged;
 } client_t;
 
