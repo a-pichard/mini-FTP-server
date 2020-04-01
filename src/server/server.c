@@ -34,7 +34,6 @@ static void accept_new_client_connection(server_t *server)
     socklen_t size;
     int client_sock;
     int idx = server->nb_client;
-    int fd;
     struct sockaddr *client_info;
 
     server->clients = realloc(server->clients, sizeof(client_t) * (idx + 1));
@@ -42,10 +41,10 @@ static void accept_new_client_connection(server_t *server)
     server->nb_client += 1;
     size = sizeof(server->clients[idx].client_info);
     client_info = (struct sockaddr *)(&server->clients[idx].client_info);
-    fd = accept(server->server_fd, client_info, &size);
+    client_sock = accept(server->server_fd, client_info, &size);
     raise_error(client_sock != -1, "accept() ");
-    server->clients[idx].fd = fd;
-    write(fd, "220 Welcome bro\n", 17);
+    server->clients[idx].fd = client_sock;
+    write(client_sock, "220 Welcome bro\n", 17);
 }
 
 void run_server(server_t *server)
@@ -53,7 +52,6 @@ void run_server(server_t *server)
     int max_fd;
     int nb_fd_ready;
     fd_set rset;
-    client_t *client;
 
     while (1) {
         max_fd = reset_selected_fd(server, &rset);

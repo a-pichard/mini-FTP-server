@@ -17,7 +17,7 @@ SRC	=	src/main.c	\
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-Iincl
+CFLAGS	=	-Iincl -Wall -Wextra
 
 NAME	=	myftp
 

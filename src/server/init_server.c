@@ -11,7 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static void init_users(server_t *server, const const char *anonymous_home)
+static void init_users(server_t *server, const char *anonymous_home)
 {
     user_t *users = malloc(sizeof(user_t));
 
