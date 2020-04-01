@@ -12,7 +12,7 @@
 
 static void client_request(server_t *serv, int client_id, int ret, char *req)
 {
-    dprintf(1, "Client with fd %d said: %s\n", serv->clients[client_id].fd, req);
+    dprintf(1, "Client with fd %d said: %s", serv->clients[client_id].fd, req);
     if (ret == 0)
         disconnect_client(serv, client_id);
 }
