@@ -8,6 +8,7 @@
 #include "server.h"
 #include "errors.h"
 #include <unistd.h>
+
 #include <stdio.h>
 
 static void client_request(server_t *serv, int client_id, int ret, char *req)

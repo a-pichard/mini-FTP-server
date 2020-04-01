@@ -13,8 +13,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <stdio.h>
-
 static int reset_selected_fd(server_t *server, fd_set *rset)
 {
     int max_fd = server->server_fd;
