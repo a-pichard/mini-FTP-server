@@ -15,7 +15,7 @@ void pass(const char *data, client_t *client, user_t *users, int nusr)
         write(client->fd, "501 Reauthentication not supported.\r\n", 37);
         return;
     }
-    client->password = !data ? strdup(data) : NULL;
+    client->password = !!data ? strdup(data) : NULL;
     if (client->username == NULL)
         write(client->fd, "332 Need account for login.\r\n", 30);
     else
