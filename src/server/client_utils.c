@@ -11,22 +11,44 @@
 #include <string.h>
 #include <stdlib.h>
 
+static void destroy_client(client_t *client)
+{
+    if (client->username)
+        free(client->username);
+    if (client->password)
+        free(client->password);
+}
+
+
+static bool empty(server_t *server)
+{
+    if (server->nb_client == 0) {
+        destroy_client(&server->clients[0]);
+        free(server->clients);
+        server->clients = NULL;
+        return (true);
+    }
+    return (false);
+}
+
 void disconnect_client(server_t *server, int id)
 {
-    int old_idx = 0;
-    int new_idx = 0;
-    client_t *clients = malloc(sizeof(client_t) * (server->nb_client - 1));
+    int new = 0;
+    client_t *clients;
 
+    server->nb_client -= 1;
+    if (empty(server))
+        return;
+    clients = malloc(sizeof(client_t) * (server->nb_client)); 
     raise_error(clients != NULL, "malloc() ");
     close(server->clients[id].fd);
-    while (old_idx < server->nb_client) {
-        if (old_idx != id) {
-            memcpy(&clients[new_idx], &server->clients[old_idx], sizeof(client_t));
-            new_idx++;
-        }
-        old_idx++;
+    for (int i = 0; i < (server->nb_client + 1); i++) {
+        if (i != id) {
+            memcpy(&clients[new], &server->clients[i], sizeof(client_t));
+            new++;
+        } else
+            destroy_client(&server->clients[i]);
     }
-    server->nb_client -= 1;
     new_disconnection_debug(server->debug, server->clients[id].fd);
     free(server->clients);
     server->clients = clients;

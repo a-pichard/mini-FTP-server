@@ -41,6 +41,7 @@ typedef struct {
 
 // Init
 void init_server(server_t *, int, const char *, bool);
+server_t *server_address(server_t *server);
 void destroy_server(void);
 int init_main_server_socket(int);
 

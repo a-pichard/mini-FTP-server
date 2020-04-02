@@ -11,7 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static server_t *server_address(server_t *server)
+server_t *server_address(server_t *server)
 {
     static server_t *save;
 
@@ -42,20 +42,4 @@ void init_server(server_t *server, int port, const char *a_home, bool debug)
     server->clients = NULL;
     server->nb_client = 0;
     server->debug = debug;
-}
-
-void destroy_server(void)
-{
-    server_t *server = server_address(NULL);
-
-    for (int i = 0; i < server->nb_users; i++) {
-        free(server->users[i].username);
-        free(server->users[i].password);
-        free(server->users[i].home);
-    }
-    if (server->users != NULL)
-        free(server->users);
-    if (server->clients != NULL)
-        free(server->clients);
-    close(server->server_fd);
 }

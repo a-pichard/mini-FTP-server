@@ -12,6 +12,7 @@ SRC	=	src/main.c	\
 		src/error/raise_error.c	\
 		src/init/init_server.c	\
 		src/init/init_socket.c	\
+		src/init/destroy.c	\
 		src/server/server.c	\
 		src/server/handle_client.c	\
 		src/server/client_utils.c	\
@@ -21,14 +22,14 @@ SRC	=	src/main.c	\
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-Iincl -Wall -Wextra
+CFLAGS	=	-Iincl -Wall -Wextra -g
 
 NAME	=	myftp
 
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CFLAGS)
+	gcc -o $(NAME) $(OBJ) $(CFLAGS) -g
 
 clean:
 	rm -f $(OBJ)
