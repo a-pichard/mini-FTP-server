@@ -11,6 +11,16 @@
 #include <string.h>
 #include <unistd.h>
 
+static server_t *server_address(server_t *server)
+{
+    static server_t *save;
+
+    if (server == NULL)
+        return (save);
+    save = server;
+    return (save);
+}
+
 static void init_users(server_t *server, const char *anonymous_home)
 {
     user_t *users = malloc(sizeof(user_t));
@@ -25,6 +35,7 @@ static void init_users(server_t *server, const char *anonymous_home)
 
 void init_server(server_t *server, int port, const char *a_home, bool debug)
 {
+    server_address(server);
     server->server_fd = init_main_server_socket(port);
     server->port = port;
     init_users(server, a_home);
@@ -33,8 +44,10 @@ void init_server(server_t *server, int port, const char *a_home, bool debug)
     server->debug = debug;
 }
 
-void destroy_server(server_t *server)
+void destroy_server(void)
 {
+    server_t *server = server_address(NULL);
+
     for (int i = 0; i < server->nb_users; i++) {
         free(server->users[i].username);
         free(server->users[i].password);
