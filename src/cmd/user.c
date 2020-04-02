@@ -16,6 +16,9 @@ void user(const char *data, client_t *client)
     if (client->is_logged) {
         write(client->fd, "501 Reauthentication not supported\r\n", 37);
         return;
+    } else if (!data || (!!data && !strlen(data))) {
+        write(client->fd, "530 Permission denied.\r\n", 25);
+        return;
     }
     client->username = strdup(data);
     write(client->fd, "331 User name okay, need password.\r\n", 37);

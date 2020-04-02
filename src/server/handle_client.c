@@ -37,19 +37,21 @@ void accept_new_client_connection(server_t *server)
 
 static void parse_cmd(const char *req, char **cmd, char **data)
 {
-    int len = strlen(req);
     char *tmp;
+    char *tmp_end;
     int sep;
+    int size;
 
-    if (!(len >= 2 && req[len - 2] == '\r' && req[len - 1] == '\n'))
+    if ((tmp_end = strstr(req, "\r\n")) == NULL)
         return;
+    size = tmp_end - req;
     tmp = strchr(req, ' ');
     if (tmp != NULL) {
         sep = (int)(tmp - req);
         *cmd = strndup(req, sep);
-        *data = strndup(&req[sep + 1], strlen(&req[sep + 1]) - 2);
+        *data = strndup(&req[sep + 1], size - sep - 1);
     } else {
-        *cmd = strndup(req, strlen(req) - 2);
+        *cmd = strndup(req, size);
     }
 }
 
