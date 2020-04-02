@@ -8,6 +8,7 @@
 #include "errors.h"
 #include <string.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static bool isStrDigit(const char *str)
 {
@@ -30,6 +31,10 @@ void input_error_handling(int ac, char **av)
             helper(av[0], 84);
     } else if (ac == 2 && (!strcmp(av[1], "-help") || !strcmp(av[1], "-h")))
         helper(av[0], 0);
-    else
-        helper(av[0], 84);
+    else {
+        if (ac == 4 && !strcmp(av[3], "debug"))
+            dprintf(1, "Debug Activated.\n");
+        else
+            helper(av[0], 84);
+    }
 }

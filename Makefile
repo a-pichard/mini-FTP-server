@@ -6,6 +6,7 @@
 ##
 
 SRC	=	src/main.c	\
+		src/debug.c	\
 		src/error/helper.c	\
 		src/error/input_error_handling.c	\
 		src/error/raise_error.c	\

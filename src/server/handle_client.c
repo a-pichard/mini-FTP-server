@@ -12,8 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <stdio.h>
-
 void accept_new_client_connection(server_t *server)
 {
     socklen_t size;
@@ -33,17 +31,17 @@ void accept_new_client_connection(server_t *server)
     server->clients[idx].password = NULL;
     server->clients[idx].is_logged = false;
     write(client_sock, "220 Service ready for new user.\r\n", 34);
-    dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd); //debug
+    new_connection_debug(server->debug, &server->clients[idx]);
 }
 
-static void parse_cmd(const char *req, char **cmd, char **data)
+static void parse_cmd(bool debug, const char *req, char **cmd, char **data)
 {
     char *tmp;
     char *tmp_end;
     int sep;
     int size;
 
-    if ((tmp_end = strstr(req, REQ_END)) == NULL)
+    if ((tmp_end = strstr(req, debug ? "\n" : "\r\n")) == NULL)
         return;
     size = tmp_end - req;
     tmp = strchr(req, ' ');
@@ -63,10 +61,10 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
 
     if (ret == 0)
         return disconnect_client(serv, id);
-    parse_cmd(req, &cmd, &data);
+    parse_cmd(serv->debug, req, &cmd, &data);
     if (cmd == NULL && data == NULL)
         return;
-    dprintf(1, "Client with fd %d said: \"%s\" --> \"%s\"\n", serv->clients[id].fd, cmd, data ? data : "NULL"); // debug
+    new_request_debug(serv->debug, serv->clients[id].fd, cmd, data);
     if (!strcmp(cmd, "USER"))
         user(data, &serv->clients[id], serv->users, serv->nb_users);
     else if (!strcmp(cmd, "PASS"))

@@ -10,7 +10,6 @@
 
 #define MAX_CLIENTS_QUEUE 5
 #define BUFFER_READ_SIZE 4096
-#define REQ_END "\r\n"
 
 #include <stdbool.h>
 #include <arpa/inet.h>
@@ -37,17 +36,27 @@ typedef struct {
     int nb_users;
     client_t *clients;
     int nb_client;
+    bool debug;
 } server_t;
 
-void init_server(server_t *, int, const char *);
+// Init
+void init_server(server_t *, int, const char *, bool);
 void destroy_server(server_t *);
 int init_main_server_socket(int);
 
+// Server
 void handle_client(fd_set *, server_t *);
 void accept_new_client_connection(server_t *);
 
+// utils
 void disconnect_client(server_t *, int);
 
+//main function
 void run_server(server_t *);
+
+//debug
+void new_connection_debug(bool, client_t *);
+void new_request_debug(bool, int, const char *, const char *);
+void new_disconnection_debug(bool, int);
 
 #endif /* !SERVER_H_ */

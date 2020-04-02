@@ -23,13 +23,14 @@ static void init_users(server_t *server, const char *anonymous_home)
     server->nb_users = 1;
 }
 
-void init_server(server_t *server, int port, const char *anonymous_home)
+void init_server(server_t *server, int port, const char *a_home, bool debug)
 {
     server->server_fd = init_main_server_socket(port);
     server->port = port;
-    init_users(server, anonymous_home);
+    init_users(server, a_home);
     server->clients = NULL;
     server->nb_client = 0;
+    server->debug = debug;
 }
 
 void destroy_server(server_t *server)
