@@ -9,17 +9,19 @@
 #include "errors.h"
 #include <unistd.h>
 #include <string.h>
-#include <stdlib.h>
 
-void user(const char *data, client_t *client)
+void user(const char *data, client_t *client, user_t *users, int nusr)
 {
     if (client->is_logged) {
-        write(client->fd, "501 Reauthentication not supported\r\n", 37);
+        write(client->fd, "501 Reauthentication not supported.\r\n", 37);
         return;
     } else if (!data || (!!data && !strlen(data))) {
         write(client->fd, "530 Permission denied.\r\n", 25);
         return;
     }
     client->username = strdup(data);
-    write(client->fd, "331 User name okay, need password.\r\n", 37);
+    if (client->password == NULL)
+        write(client->fd, "331 User name okay, need password.\r\n", 37);
+    else
+        auth(client, users, nusr);
 }

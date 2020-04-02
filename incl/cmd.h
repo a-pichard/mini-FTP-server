@@ -10,6 +10,9 @@
 
 #include "server.h"
 
-void user(const char *, client_t *);
+void auth(client_t *, user_t *, int);
+
+void user(const char *, client_t *, user_t *, int);
+void pass(const char *, client_t *, user_t *, int);
 
 #endif /* !CMD_H_ */

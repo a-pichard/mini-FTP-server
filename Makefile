@@ -14,7 +14,9 @@ SRC	=	src/main.c	\
 		src/server/server.c	\
 		src/server/handle_client.c	\
 		src/server/client_utils.c	\
-		src/cmd/user.c
+		src/cmd/utils/auth.c	\
+		src/cmd/user.c	\
+		src/cmd/pass.c
 
 OBJ	=	$(SRC:.c=.o)
 

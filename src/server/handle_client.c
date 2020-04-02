@@ -30,6 +30,7 @@ void accept_new_client_connection(server_t *server)
     raise_error(client_sock != -1, "accept() ");
     server->clients[idx].fd = client_sock;
     server->clients[idx].username = NULL;
+    server->clients[idx].password = NULL;
     server->clients[idx].is_logged = false;
     write(client_sock, "220 Service ready for new user.\r\n", 34);
     dprintf(1, "New connection from %s:%u with id: %d\n", inet_ntoa(server->clients[idx].client_info.sin_addr), ntohs(server->clients[idx].client_info.sin_port), server->clients[idx].fd); //debug
@@ -42,7 +43,7 @@ static void parse_cmd(const char *req, char **cmd, char **data)
     int sep;
     int size;
 
-    if ((tmp_end = strstr(req, "\r\n")) == NULL)
+    if ((tmp_end = strstr(req, REQ_END)) == NULL)
         return;
     size = tmp_end - req;
     tmp = strchr(req, ' ');
@@ -66,8 +67,10 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     if (cmd == NULL && data == NULL)
         return;
     dprintf(1, "Client with fd %d said: \"%s\" --> \"%s\"\n", serv->clients[id].fd, cmd, data ? data : "NULL"); // debug
-    if (!strncmp(cmd, "USER", 4))
-        user(data, &serv->clients[id]);
+    if (!strcmp(cmd, "USER"))
+        user(data, &serv->clients[id], serv->users, serv->nb_users);
+    else if (!strcmp(cmd, "PASS"))
+        pass(data, &serv->clients[id], serv->users, serv->nb_users);
     free(cmd);
     free(data);
 }
