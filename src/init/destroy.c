@@ -33,6 +33,8 @@ static void destroy_clients(client_t *clients, int nb_clients)
             free(clients[i].username);
         if (clients[i].password != NULL)
             free(clients[i].password);
+        if (clients[i].req)
+            free(clients[i].req);
         close(clients[i].fd);
     }
     free(clients);

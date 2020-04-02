@@ -17,6 +17,8 @@ static void destroy_client(client_t *client)
         free(client->username);
     if (client->password)
         free(client->password);
+    if (client->req)
+        free(client->req);
 }
 
 
