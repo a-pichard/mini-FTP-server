@@ -27,31 +27,12 @@ void accept_new_client_connection(server_t *server)
     client_sock = accept(server->server_fd, client_info, &size);
     raise_error(client_sock != -1, "accept() ");
     server->clients[idx].fd = client_sock;
+    server->clients[idx].req = NULL;
     server->clients[idx].username = NULL;
     server->clients[idx].password = NULL;
     server->clients[idx].is_logged = false;
-    write(client_sock, "220 Service ready for new user.\r\n", 34);
+    respond_to(client_sock, "220 Service ready for new user.\r\n");
     new_connection_debug(server->debug, &server->clients[idx]);
-}
-
-static void parse_cmd(bool debug, const char *req, char **cmd, char **data)
-{
-    char *tmp;
-    char *tmp_end;
-    int sep;
-    int size;
-
-    if ((tmp_end = strstr(req, debug ? "\n" : "\r\n")) == NULL)
-        return;
-    size = tmp_end - req;
-    tmp = strchr(req, ' ');
-    if (tmp != NULL) {
-        sep = (int)(tmp - req);
-        *cmd = strndup(req, sep);
-        *data = strndup(&req[sep + 1], size - sep - 1);
-    } else {
-        *cmd = strndup(req, size);
-    }
 }
 
 static void client_request(server_t *serv, int id, int ret, const char *req)
@@ -61,7 +42,7 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
 
     if (ret == 0)
         return disconnect_client(serv, id);
-    parse_cmd(serv->debug, req, &cmd, &data);
+    parse_cmd(&serv->clients[id].req, req, &cmd, &data);
     if (cmd == NULL && data == NULL)
         return;
     new_request_debug(serv->debug, serv->clients[id].fd, cmd, data);
@@ -69,6 +50,8 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
         user(data, &serv->clients[id], serv->users, serv->nb_users);
     else if (!strcmp(cmd, "PASS"))
         pass(data, &serv->clients[id], serv->users, serv->nb_users);
+    else
+        respond_to(serv->clients[id].fd, "500 Unknown command.\r\n");
     free(cmd);
     free(data);
 }

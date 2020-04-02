@@ -14,8 +14,10 @@ SRC	=	src/main.c	\
 		src/init/init_socket.c	\
 		src/init/destroy.c	\
 		src/server/server.c	\
+		src/server/parse_cmd.c	\
 		src/server/handle_client.c	\
-		src/server/client_utils.c	\
+		src/server/disconnect_client.c	\
+		src/server/send.c	\
 		src/cmd/utils/auth.c	\
 		src/cmd/user.c	\
 		src/cmd/pass.c

@@ -24,6 +24,7 @@ static bool empty(server_t *server)
 {
     if (server->nb_client == 0) {
         destroy_client(&server->clients[0]);
+        new_disconnection_debug(server->debug, server->clients[0].fd);
         free(server->clients);
         server->clients = NULL;
         return (true);

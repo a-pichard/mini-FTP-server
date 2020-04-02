@@ -10,6 +10,7 @@
 
 #define MAX_CLIENTS_QUEUE 5
 #define BUFFER_READ_SIZE 4096
+#define REQ_END "\r\n"
 
 #include <stdbool.h>
 #include <arpa/inet.h>
@@ -24,6 +25,7 @@ typedef struct {
 typedef struct {
     int fd;
     struct sockaddr_in client_info;
+    char *req;
     char *username;
     char *password;
     bool is_logged;
@@ -48,9 +50,9 @@ int init_main_server_socket(int);
 // Server
 void handle_client(fd_set *, server_t *);
 void accept_new_client_connection(server_t *);
-
-// utils
 void disconnect_client(server_t *, int);
+void respond_to(int fd, const char *msg);
+void parse_cmd(char **, const char *, char **, char **);
 
 //main function
 void run_server(server_t *);

@@ -27,10 +27,10 @@ void check_user(client_t *client, user_t *user)
 
     if (!strcmp(upass, "") || !strcmp(upass, cpass)) {
         client->is_logged = true;
-        write(client->fd, "230 User logged in, proceed.\r\n", 31);
+        respond_to(client->fd, "230 User logged in, proceed.\r\n");
     } else {
         reset_credentials(client);
-        write(client->fd, "530 Login incorrect.\r\n", 23);
+        respond_to(client->fd, "530 Login incorrect.\r\n");
     }
 }
 
@@ -43,5 +43,5 @@ void auth(client_t *client, user_t *users, int nusr)
         }
     }
     reset_credentials(client);
-    write(client->fd, "530 Login incorrect.\r\n", 23);
+    respond_to(client->fd, "530 Login incorrect.\r\n");
 }
