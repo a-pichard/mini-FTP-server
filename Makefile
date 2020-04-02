@@ -17,6 +17,7 @@ SRC	=	src/main.c	\
 		src/server/parse_cmd.c	\
 		src/server/handle_client.c	\
 		src/server/disconnect_client.c	\
+		src/server/control_cmd.c	\
 		src/server/send.c	\
 		src/cmd/utils/auth.c	\
 		src/cmd/user.c	\

@@ -49,10 +49,10 @@ int init_main_server_socket(int);
 
 // Server
 void handle_client(fd_set *, server_t *);
-void accept_new_client_connection(server_t *);
 void disconnect_client(server_t *, int);
 void respond_to(int fd, const char *msg);
 void parse_cmd(char **, const char *, char **, char **);
+void control_cmds(client_t *, const char *, const char *);
 
 //main function
 void run_server(server_t *);

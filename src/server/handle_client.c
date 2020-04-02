@@ -12,29 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void accept_new_client_connection(server_t *server)
-{
-    socklen_t size;
-    int client_sock;
-    int idx = server->nb_client;
-    struct sockaddr *client_info;
-
-    server->clients = realloc(server->clients, sizeof(client_t) * (idx + 1));
-    raise_error(server->clients != NULL, "realloc()) ");
-    server->nb_client += 1;
-    size = sizeof(server->clients[idx].client_info);
-    client_info = (struct sockaddr *)(&server->clients[idx].client_info);
-    client_sock = accept(server->server_fd, client_info, &size);
-    raise_error(client_sock != -1, "accept() ");
-    server->clients[idx].fd = client_sock;
-    server->clients[idx].req = NULL;
-    server->clients[idx].username = NULL;
-    server->clients[idx].password = NULL;
-    server->clients[idx].is_logged = false;
-    respond_to(client_sock, "220 Service ready for new user.\r\n");
-    new_connection_debug(server->debug, &server->clients[idx]);
-}
-
 static void client_request(server_t *serv, int id, int ret, const char *req)
 {
     char *cmd = NULL;
@@ -51,7 +28,7 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     else if (!strcmp(cmd, "PASS"))
         pass(data, &serv->clients[id], serv->users, serv->nb_users);
     else
-        respond_to(serv->clients[id].fd, "500 Unknown command.\r\n");
+        control_cmds(&serv->clients[id], cmd, data);
     free(cmd);
     free(data);
 }
