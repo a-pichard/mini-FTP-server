@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void pwd(client_t *client, const char *_ __attribute__((unused)))
+void pwd(client_t *client, const char *_ UNUSED)
 {
     char *res = calloc(strlen(client->wd) + 18, sizeof(char));
 

@@ -22,5 +22,6 @@ void user(const char *, client_t *, user_t *, int);
 void pass(const char *, client_t *, user_t *, int);
 void quit(server_t *, int);
 void pwd(client_t *, const char *);
+void noop(client_t *, const char *);
 
 #endif /* !CMD_H_ */

@@ -11,6 +11,7 @@
 #define MAX_CLIENTS_QUEUE 5
 #define BUFFER_READ_SIZE 4096
 #define REQ_END "\r\n"
+#define UNUSED __attribute__((unused))
 
 #include <stdbool.h>
 #include <arpa/inet.h>

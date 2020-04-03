@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <signal.h>
 
-static void sig_handler(int sig __attribute__((unused)))
+static void sig_handler(int sig UNUSED)
 {
     destroy_server();
     exit(0);
