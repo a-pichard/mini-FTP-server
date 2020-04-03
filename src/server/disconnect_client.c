@@ -20,6 +20,10 @@ static void destroy_client(client_t *client)
         free(client->password);
     if (client->req)
         free(client->req);
+    if (client->home)
+        free(client->home);
+    if (client->wd)
+        free(client->wd);
 }
 
 

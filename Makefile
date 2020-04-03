@@ -22,7 +22,8 @@ SRC	=	src/main.c	\
 		src/cmd/utils/auth.c	\
 		src/cmd/user.c	\
 		src/cmd/pass.c	\
-		src/cmd/quit.c
+		src/cmd/quit.c	\
+		src/cmd/pwd.c
 
 OBJ	=	$(SRC:.c=.o)
 

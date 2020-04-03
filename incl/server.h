@@ -28,6 +28,8 @@ typedef struct {
     char *req;
     char *username;
     char *password;
+    char *home;
+    char *wd;
     bool is_logged;
 } client_t;
 

@@ -23,9 +23,9 @@ static cmd_t index_of(const char **narr, cmd_t *funcs, const char *cmd)
 
 void control_cmds(client_t *client, const char *cmd, const char *data)
 {
-    cmd_t funcs[] = {};
+    cmd_t funcs[] = {&pwd};
     cmd_t func = NULL;
-    const char *narr[] = {NULL};
+    const char *narr[] = {"PWD"};
 
     if (!client->is_logged) {
         respond_to(client->fd, "530 Please login with USER and PASS.\r\n");

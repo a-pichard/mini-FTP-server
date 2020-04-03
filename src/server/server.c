@@ -9,6 +9,7 @@
 #include "errors.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 static void init_new_client(client_t *client, int client_sock)
 {
@@ -17,6 +18,8 @@ static void init_new_client(client_t *client, int client_sock)
     client->username = NULL;
     client->password = NULL;
     client->is_logged = false;
+    client->home = NULL;
+    client->wd = strdup("/");
 }
 
 static void accept_new_client_connection(server_t *server)
