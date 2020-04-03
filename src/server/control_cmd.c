@@ -25,7 +25,7 @@ void control_cmds(client_t *client, const char *cmd, const char *data)
 {
     cmd_t funcs[] = {&pwd, &noop};
     cmd_t func = NULL;
-    const char *narr[] = {"PWD", "NOOP"};
+    const char *narr[] = {"PWD", "NOOP", NULL};
 
     if (!client->is_logged) {
         respond_to(client->fd, "530 Please login with USER and PASS.\r\n");
