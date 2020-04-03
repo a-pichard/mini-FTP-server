@@ -12,10 +12,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+static log_f_t index_of(const char **narr, log_f_t *funcs, const char *cmd)
+{
+    int i = 0;
+
+    while (narr[i] != NULL) {
+        if (!strcmp(narr[i], cmd))
+            return (funcs[i]);
+        i++;
+    }
+    return (NULL);
+}
+
 static void client_request(server_t *serv, int id, int ret, const char *req)
 {
     char *cmd = NULL;
     char *data = NULL;
+    log_f_t funcs[] = {&user, &pass};
+    log_f_t func = NULL;
+    const char *log_n[] = {"USER", "PASS", NULL};
 
     if (ret == 0)
         return disconnect_client(serv, id);
@@ -23,10 +38,10 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     if (cmd == NULL && data == NULL)
         return;
     new_request_debug(serv->debug, serv->clients[id].fd, cmd, data);
-    if (!strcmp(cmd, "USER"))
-        user(data, &serv->clients[id], serv->users, serv->nb_users);
-    else if (!strcmp(cmd, "PASS"))
-        pass(data, &serv->clients[id], serv->users, serv->nb_users);
+    if ((func = index_of(log_n, funcs, cmd)) != NULL)
+        (func)(data, &serv->clients[id], serv->users, serv->nb_users);
+    else if (!strcmp(cmd, "QUIT"))
+        quit(serv, id);
     else
         control_cmds(&serv->clients[id], cmd, data);
     free(cmd);

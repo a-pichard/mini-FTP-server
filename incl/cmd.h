@@ -10,9 +10,14 @@
 
 #include "server.h"
 
+typedef void (*log_f_t)(const char *, client_t *, user_t *, int);
+
+// utils
 void auth(client_t *, user_t *, int);
 
+// cmds
 void user(const char *, client_t *, user_t *, int);
 void pass(const char *, client_t *, user_t *, int);
+void quit(server_t *, int);
 
 #endif /* !CMD_H_ */

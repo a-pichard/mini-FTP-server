@@ -21,7 +21,8 @@ SRC	=	src/main.c	\
 		src/server/send.c	\
 		src/cmd/utils/auth.c	\
 		src/cmd/user.c	\
-		src/cmd/pass.c
+		src/cmd/pass.c	\
+		src/cmd/quit.c
 
 OBJ	=	$(SRC:.c=.o)
 
