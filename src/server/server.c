@@ -14,6 +14,7 @@
 static void init_new_client(client_t *client, int client_sock)
 {
     client->fd = client_sock;
+    client->data_fd = -1;
     client->req = NULL;
     client->username = NULL;
     client->password = NULL;

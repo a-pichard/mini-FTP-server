@@ -25,6 +25,7 @@ typedef struct {
 
 typedef struct {
     int fd;
+    int data_fd;
     struct sockaddr_in client_info;
     char *req;
     char *username;

@@ -24,6 +24,8 @@ static void destroy_client(client_t *client)
         free(client->home);
     if (client->wd)
         free(client->wd);
+    if (client->data_fd != -1)
+        close(client->data_fd);
 }
 
 
