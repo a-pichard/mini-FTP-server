@@ -13,6 +13,7 @@
 
 static void destroy_client(client_t *client)
 {
+    close(client->fd);
     if (client->username)
         free(client->username);
     if (client->password)
@@ -44,7 +45,6 @@ void disconnect_client(server_t *server, int id)
         return;
     clients = malloc(sizeof(client_t) * (server->nb_client)); 
     raise_error(clients != NULL, "malloc() ");
-    close(server->clients[id].fd);
     for (int i = 0; i < (server->nb_client + 1); i++) {
         if (i != id) {
             memcpy(&clients[new], &server->clients[i], sizeof(client_t));
