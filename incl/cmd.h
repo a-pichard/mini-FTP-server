@@ -10,7 +10,9 @@
 
 #include "server.h"
 
+// index of functions pointer
 typedef void (*log_f_t)(const char *, client_t *, user_t *, int);
+typedef void (*cmd_t)(client_t *, const char *);
 
 // utils
 void auth(client_t *, user_t *, int);

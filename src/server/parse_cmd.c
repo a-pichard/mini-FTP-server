@@ -53,6 +53,17 @@ static char *get_rqst(char **pbuf, const char *req)
     }
 }
 
+static void final_checks(char *rqst, char **cmd, char **data)
+{
+    if (!(*cmd))
+        return;
+    if (!strlen(*cmd) && !(*data)) {
+        free(*cmd);
+        *cmd = NULL;
+    }
+    free(rqst);
+}
+
 void parse_cmd(char **pbuf, const char *req, char **cmd, char **data)
 {
     char *tmp;
@@ -73,5 +84,5 @@ void parse_cmd(char **pbuf, const char *req, char **cmd, char **data)
     } else {
         *cmd = strndup(rqst, size);
     }
-    free(rqst);
+    final_checks(rqst, cmd, data);
 }
