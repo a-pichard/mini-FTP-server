@@ -17,7 +17,7 @@
 
 static int get_file_fd(client_t *client, const char *data)
 {
-    unsigned char *path;
+    char *path;
     int fd;
     char *ok_msg = "150 File status okay; about to open data connection.\r\n";
 
@@ -41,7 +41,7 @@ static int get_file_fd(client_t *client, const char *data)
 
 static bool read_n_write(int file_fd, int data_fd)
 {
-    char buffer[BUFFER_READ_SIZE] = { 0 };
+    unsigned char buffer[BUFFER_READ_SIZE] = { 0 };
     int ret_read;
     int ret_write;
 
