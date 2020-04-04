@@ -85,6 +85,7 @@ void retr(client_t *client, const char *d)
     pid = fork();
     raise_error(pid != -1, "fork() ");
     if (!!pid) {
+        close (client->data_fd);
         client->data_fd = -1;
         client->mode = NOMODE;
     } else {
