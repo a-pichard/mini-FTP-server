@@ -12,13 +12,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-static log_f_t index_of(const char **narr, log_f_t *funcs, const char *cmd)
+static log_f_t index_of(const char **narr, log_f_t *funcs, char *cmd)
 {
     int i = 0;
 
     while (narr[i] != NULL) {
-        if (!strcmp(narr[i], cmd))
+        if (!strcmp(narr[i], cmd)) {
+            free(cmd);
             return (funcs[i]);
+        }
         i++;
     }
     return (NULL);
@@ -40,12 +42,13 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     new_request_debug(serv->debug, serv->clients[id].fd, cmd, data);
     if ((func = index_of(log_n, funcs, cmd)) != NULL)
         (func)(data, &serv->clients[id], serv->users, serv->nb_users);
-    else if (!strcmp(cmd, "QUIT"))
+    else if (!strcmp(cmd, "QUIT")) {
         quit(serv, id);
-    else
+        free(cmd);
+    } else
         control_cmds(&serv->clients[id], cmd, data);
-    free(cmd);
-    free(data);
+    if (data != NULL)
+        free(data);
 }
 
 void handle_client(fd_set *rset, server_t *server)

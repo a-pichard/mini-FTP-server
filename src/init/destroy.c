@@ -8,6 +8,7 @@
 #include "server.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static void destroy_users(user_t *users, int nb_users)
 {
@@ -50,6 +51,8 @@ void destroy_server(void)
 {
     server_t *server = server_address(NULL);
 
+    if (server->debug)
+        dprintf(1, "\nDestroying the server...\n");
     destroy_users(server->users, server->nb_users);
     destroy_clients(server->clients, server->nb_client);
     close(server->server_fd);

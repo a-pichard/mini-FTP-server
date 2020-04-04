@@ -5,7 +5,7 @@
 ** port
 */
 
-#include "server.h"
+#include "cmd.h"
 #include "errors.h"
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -73,7 +73,7 @@ static bool fill_sin(const char *data, struct sockaddr_in *sin)
     return (true);
 }
 
-void port(client_t *client, const char *data)
+void port(client_t *client, char *data)
 {
     client->mode = NOMODE;
     memset(&client->data_info, 0, sizeof(client->data_info));

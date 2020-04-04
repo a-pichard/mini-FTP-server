@@ -48,7 +48,7 @@ static char *format_ip(char *given_ip)
     return (given_ip);
 }
 
-void pasv(client_t *client, const char *data UNUSED)
+void pasv(client_t *client, char *data UNUSED)
 {
     struct sockaddr_in sin = { 0 };
     char prt_form[] = "227 Entering Passive Mode (%s,%u,%u).\r\n";

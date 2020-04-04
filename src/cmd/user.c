@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 
-void user(const char *data, client_t *client, user_t *users, int nusr)
+void user(char *data, client_t *client, user_t *users, int nusr)
 {
     if (client->is_logged) {
         respond_to(client->fd, "501 Reauthentication not supported.\r\n");

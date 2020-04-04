@@ -8,20 +8,25 @@
 #include "cmd.h"
 #include "server.h"
 #include <string.h>
+#include <stdlib.h>
 
-static cmd_t index_of(const char **narr, cmd_t *funcs, const char *cmd)
+static cmd_t index_of(const char **narr, cmd_t *funcs, char *cmd)
 {
     int i = 0;
+    cmd_t command = NULL;
 
     while (narr[i] != NULL) {
-        if (!strcmp(narr[i], cmd))
-            return (funcs[i]);
+        if (!strcmp(narr[i], cmd)) {
+            command = funcs[i];
+            break;
+        }
         i++;
     }
-    return (NULL);
+    free(cmd);
+    return (command);
 }
 
-void control_cmds(client_t *client, const char *cmd, const char *data)
+void control_cmds(client_t *client, char *cmd, char *data)
 {
     cmd_t funcs[] = {&pwd, &noop, &pasv, &port, &retr};
     cmd_t func = NULL;
@@ -32,8 +37,8 @@ void control_cmds(client_t *client, const char *cmd, const char *data)
         return;
     }
     func = index_of(narr, funcs, cmd);
-    if (!func)
+    if (!func) {
         respond_to(client->fd, "500 Unknown command.\r\n");
-    else
+    } else
         (func)(client, data);
 }

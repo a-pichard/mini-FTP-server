@@ -64,7 +64,7 @@ void handle_client(fd_set *, server_t *);
 void disconnect_client(server_t *, int);
 void respond_to(int fd, const char *msg);
 void parse_cmd(char **, const char *, char **, char **);
-void control_cmds(client_t *, const char *, const char *);
+void control_cmds(client_t *, char *, char *);
 
 //main function
 void run_server(server_t *);

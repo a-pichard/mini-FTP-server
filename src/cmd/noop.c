@@ -8,7 +8,7 @@
 #include "cmd.h"
 #include <unistd.h>
 
-void noop(client_t *client, const char *d UNUSED)
+void noop(client_t *client, char *data UNUSED)
 {
     respond_to(client->fd, "200 Command okay.\r\n");
 }

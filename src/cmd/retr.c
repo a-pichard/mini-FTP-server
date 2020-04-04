@@ -75,26 +75,24 @@ static bool send_data(client_t *client, int file_fd)
     return (status);
 }
 
-void retr(client_t *client, const char *d)
+void retr(client_t *client, char *data)
 {
-    int file_fd = get_file_fd(client, d);
-    int pid;
+    int file_fd = get_file_fd(client, data);
 
     if (file_fd == -1)
         return;
-    pid = fork();
-    raise_error(pid != -1, "fork() ");
-    if (!!pid) {
+    if (!!(fork())) {
         close (client->data_fd);
         client->data_fd = -1;
         client->mode = NOMODE;
     } else {
+        free(data);
         if (send_data(client, file_fd) == false) {
             respond_to(client->fd, "500 Something went wrong.\r\n");
         } else {
             respond_to(client->fd, "226 Closing data connection.\r\n");
         }
-        close(client->data_fd);
+        destroy_server();
         close(file_fd);
         exit(0);
     }

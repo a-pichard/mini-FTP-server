@@ -11,21 +11,21 @@
 #include "server.h"
 
 // index of functions pointer
-typedef void (*log_f_t)(const char *, client_t *, user_t *, int);
-typedef void (*cmd_t)(client_t *, const char *);
+typedef void (*log_f_t)(char *, client_t *, user_t *, int);
+typedef void (*cmd_t)(client_t *, char *);
 
 // utils
 void auth(client_t *, user_t *, int);
 char *get_path(client_t *, const char *);
 
 // cmds
-void user(const char *, client_t *, user_t *, int);
-void pass(const char *, client_t *, user_t *, int);
+void user(char *, client_t *, user_t *, int);
+void pass(char *, client_t *, user_t *, int);
 void quit(server_t *, int);
-void pwd(client_t *, const char *);
-void noop(client_t *, const char *);
-void pasv(client_t *, const char *);
-void port(client_t *, const char *);
-void retr(client_t *, const char *);
+void pwd(client_t *, char *);
+void noop(client_t *, char *);
+void pasv(client_t *, char *);
+void port(client_t *, char *);
+void retr(client_t *, char *);
 
 #endif /* !CMD_H_ */
