@@ -39,33 +39,40 @@ static int get_file_fd(client_t *client, const char *data)
     return (fd);
 }
 
-static size_t get_file_size(int fd)
+static bool read_n_write(int file_fd, int data_fd)
 {
-    struct stat st;
+    char buffer[BUFFER_READ_SIZE] = { 0 };
+    int ret_read;
+    int ret_write;
 
-    fstat(fd, &st);
-    return (st.st_size);
+    while ((ret_read = read(file_fd, buffer, BUFFER_READ_SIZE)) > 0) {
+        ret_write = write(data_fd, buffer, ret_read);
+        if (ret_write == -1)
+            return (false);
+    }
+    return (true);
 }
 
-static bool send_data(client_t *client, int file_fd, size_t size)
+static bool send_data(client_t *client, int file_fd)
 {
     int fd;
     struct sockaddr *infos;
     socklen_t len;
+    bool status = false;
 
     if (client->mode == ACTIVE) {
         infos = (struct sockaddr *)&client->data_info;
         len = sizeof(client->data_info);
         if (connect(client->data_fd, infos, len) == -1)
             return (false);
-        sendfile(client->data_fd, file_fd, NULL, size);
+        status = read_n_write(file_fd, client->data_fd);
     } else if (client->mode == PASSIVE) {
         if ((fd = accept(client->data_fd, NULL, NULL)) == -1)
             return (false);
-        sendfile(fd, file_fd, NULL, size);
+        status = read_n_write(file_fd, fd);
         close(fd);
     }
-    return (true);
+    return (status);
 }
 
 void retr(client_t *client, const char *d)
@@ -81,7 +88,7 @@ void retr(client_t *client, const char *d)
         client->data_fd = -1;
         client->mode = NOMODE;
     } else {
-        if (send_data(client, file_fd, get_file_size(file_fd)) == false) {
+        if (send_data(client, file_fd) == false) {
             respond_to(client->fd, "500 Something went wrong.\r\n");
         } else {
             respond_to(client->fd, "226 Closing data connection.\r\n");
