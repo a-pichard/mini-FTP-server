@@ -77,11 +77,11 @@ void port(client_t *client, const char *data)
     struct sockaddr_in sin = { 0 };
     int ret;
 
+    client->mode = NOMODE;
     if (!fill_sin(data, &sin)) {
         respond_to(client->fd, "500 Missing data connection.\r\n");
         return;
     }
-    client->mode = NOMODE;
     if (client->data_fd != -1)
         close(client->data_fd);
     client->data_fd = socket(AF_INET, SOCK_STREAM, 0);
