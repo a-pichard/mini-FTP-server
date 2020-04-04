@@ -47,18 +47,25 @@ static size_t get_file_size(int fd)
     return (st.st_size);
 }
 
-static void write_to_data_socket(client_t *client, int file_fd, size_t size)
+static bool send_data(client_t *client, int file_fd, size_t size)
 {
     int fd;
+    struct sockaddr *infos;
+    socklen_t len;
 
     if (client->mode == ACTIVE) {
-        connect(client->data_fd, NULL, 0);
+        infos = (struct sockaddr *)&client->data_info;
+        len = sizeof(client->data_info);
+        if (connect(client->data_fd, infos, len) == -1)
+            return (false);
         sendfile(client->data_fd, file_fd, NULL, size);
     } else if (client->mode == PASSIVE) {
-        fd = accept(client->data_fd, NULL, NULL);
+        if ((fd = accept(client->data_fd, NULL, NULL)) == -1)
+            return (false);
         sendfile(fd, file_fd, NULL, size);
         close(fd);
     }
+    return (true);
 }
 
 void retr(client_t *client, const char *d)
@@ -74,10 +81,13 @@ void retr(client_t *client, const char *d)
         client->data_fd = -1;
         client->mode = NOMODE;
     } else {
-        write_to_data_socket(client, file_fd, get_file_size(file_fd));
+        if (send_data(client, file_fd, get_file_size(file_fd)) == false) {
+            respond_to(client->fd, "500 Something went wrong.\r\n");
+        } else {
+            respond_to(client->fd, "226 Closing data connection.\r\n");
+        }
         close(file_fd);
         close(client->data_fd);
-        respond_to(client->fd, "226 Closing data connection.\r\n");
         exit(0);
     }
 }

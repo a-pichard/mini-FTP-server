@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <string.h>
 
 static int get_port(const char *data)
 {
@@ -74,11 +75,10 @@ static bool fill_sin(const char *data, struct sockaddr_in *sin)
 
 void port(client_t *client, const char *data)
 {
-    struct sockaddr_in sin = { 0 };
-    int ret;
-
     client->mode = NOMODE;
-    if (!fill_sin(data, &sin)) {
+    memset(&client->data_info, 0, sizeof(client->data_info));
+    if (!fill_sin(data, &client->data_info)) {
+        memset(&client->data_info, 0, sizeof(client->data_info));
         respond_to(client->fd, "500 Missing data connection.\r\n");
         return;
     }
@@ -86,11 +86,6 @@ void port(client_t *client, const char *data)
         close(client->data_fd);
     client->data_fd = socket(AF_INET, SOCK_STREAM, 0);
     raise_error(client->data_fd != -1, "socket() ");
-    ret = connect(client->data_fd, (struct sockaddr *)(&sin), sizeof(sin));
-    if (ret == -1)
-        respond_to(client->fd, "500 Failed to connect to socket.\r\n");
-    else {
-        client->mode = ACTIVE;
-        respond_to(client->fd, "200 Command okay.\r\n");
-    }
+    client->mode = ACTIVE;
+    respond_to(client->fd, "200 Command okay.\r\n");
 }

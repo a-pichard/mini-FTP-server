@@ -32,6 +32,7 @@ typedef struct {
 typedef struct {
     int fd;
     int data_fd;
+    struct sockaddr_in data_info;
     transfer_mode_t mode;
     struct sockaddr_in client_info;
     char *req;
