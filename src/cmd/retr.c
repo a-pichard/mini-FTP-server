@@ -89,12 +89,13 @@ void retr(client_t *client, const char *d)
         client->mode = NOMODE;
     } else {
         if (send_data(client, file_fd) == false) {
+            close(client->data_fd);
             respond_to(client->fd, "500 Something went wrong.\r\n");
         } else {
+            close(client->data_fd);
             respond_to(client->fd, "226 Closing data connection.\r\n");
         }
         close(file_fd);
-        close(client->data_fd);
         exit(0);
     }
 }
