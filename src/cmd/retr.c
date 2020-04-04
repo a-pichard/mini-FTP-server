@@ -17,7 +17,7 @@
 
 static int get_file_fd(client_t *client, const char *data)
 {
-    char *path;
+    unsigned char *path;
     int fd;
     char *ok_msg = "150 File status okay; about to open data connection.\r\n";
 
