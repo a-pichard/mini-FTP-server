@@ -20,13 +20,15 @@ SRC	=	src/main.c	\
 		src/server/control_cmd.c	\
 		src/server/send.c	\
 		src/cmd/utils/auth.c	\
+		src/cmd/utils/get_path.c	\
 		src/cmd/user.c	\
 		src/cmd/pass.c	\
 		src/cmd/quit.c	\
 		src/cmd/pwd.c	\
 		src/cmd/noop.c	\
 		src/cmd/pasv.c	\
-		src/cmd/port.c
+		src/cmd/port.c	\
+		src/cmd/retr.c
 
 OBJ	=	$(SRC:.c=.o)
 

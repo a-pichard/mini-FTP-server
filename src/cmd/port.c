@@ -81,6 +81,7 @@ void port(client_t *client, const char *data)
         respond_to(client->fd, "500 Missing data connection.\r\n");
         return;
     }
+    client->mode = NOMODE;
     if (client->data_fd != -1)
         close(client->data_fd);
     client->data_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -88,6 +89,8 @@ void port(client_t *client, const char *data)
     ret = connect(client->data_fd, (struct sockaddr *)(&sin), sizeof(sin));
     if (ret == -1)
         respond_to(client->fd, "500 Failed to connect to socket.\r\n");
-    else
+    else {
+        client->mode = ACTIVE;
         respond_to(client->fd, "200 Command okay.\r\n");
+    }
 }

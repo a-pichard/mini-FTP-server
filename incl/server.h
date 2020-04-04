@@ -17,6 +17,12 @@
 #include <arpa/inet.h>
 #include <sys/select.h>
 
+typedef enum {
+    PASSIVE,
+    ACTIVE,
+    NOMODE
+} transfer_mode_t;
+
 typedef struct {
     char *username;
     char *password;
@@ -26,6 +32,7 @@ typedef struct {
 typedef struct {
     int fd;
     int data_fd;
+    transfer_mode_t mode;
     struct sockaddr_in client_info;
     char *req;
     char *username;

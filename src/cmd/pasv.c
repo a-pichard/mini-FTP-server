@@ -59,4 +59,5 @@ void pasv(client_t *client, const char *data UNUSED)
     ip = format_ip(inet_ntoa(client->client_info.sin_addr));
     port = ntohs(sin.sin_port);
     dprintf(client->fd, prt_form, ip, port / 256, port % 256);
+    client->mode = PASSIVE;
 }

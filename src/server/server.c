@@ -21,6 +21,7 @@ static void init_new_client(client_t *client, int client_sock)
     client->is_logged = false;
     client->home = NULL;
     client->wd = strdup("/");
+    client->mode = NOMODE;
 }
 
 static void accept_new_client_connection(server_t *server)

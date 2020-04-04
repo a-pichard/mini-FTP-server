@@ -16,6 +16,7 @@ typedef void (*cmd_t)(client_t *, const char *);
 
 // utils
 void auth(client_t *, user_t *, int);
+char *get_path(client_t *, const char *);
 
 // cmds
 void user(const char *, client_t *, user_t *, int);
@@ -25,5 +26,6 @@ void pwd(client_t *, const char *);
 void noop(client_t *, const char *);
 void pasv(client_t *, const char *);
 void port(client_t *, const char *);
+void retr(client_t *, const char *);
 
 #endif /* !CMD_H_ */
