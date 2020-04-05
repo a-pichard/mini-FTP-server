@@ -10,6 +10,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+static char *check_strdup(const char *s)
+{
+    char *res = strdup(s);
+
+    raise_error(res != NULL, "strdup() ");
+    return (res);
+}
+
 static char *my_strcat(const char *s1, const char *s2)
 {
     char *res;
@@ -34,7 +42,7 @@ static char *get_rqst(char **pbuf, const char *req)
 
     if (strstr(req, REQ_END) != NULL) {
         if (*pbuf == NULL) {
-            return (strdup(req));
+            return (check_strdup(req));
         } else {
             tmp = my_strcat(*pbuf, req);
             free(*pbuf);
@@ -43,7 +51,7 @@ static char *get_rqst(char **pbuf, const char *req)
         }
     } else {
         if (*pbuf == NULL) {
-            *pbuf = strdup(req);
+            *pbuf = check_strdup(req);
         } else {
             tmp = my_strcat(*pbuf, req);
             free(*pbuf);

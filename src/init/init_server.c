@@ -27,8 +27,11 @@ static void init_users(server_t *server, const char *anonymous_home)
 
     raise_error(users != NULL, "malloc() ");
     users[0].username = strdup("Anonymous");
+    raise_error(users[0].username != NULL, "strdup() ");
     users[0].password = strdup("");
-    users[0].home = strdup(anonymous_home);
+    raise_error(users[0].password != NULL, "strdup() ");
+    users[0].home = realpath(anonymous_home, NULL);
+    raise_error(users[0].home != NULL, "realpath() ");
     server->users = users;
     server->nb_users = 1;
 }

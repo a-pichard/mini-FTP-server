@@ -29,7 +29,7 @@ static int get_file_fd(client_t *client, const char *data)
         respond_to(client->fd, "425 Use PORT or PASV first.\r\n");
         return (-1);
     }
-    path = get_path(client, data);
+    path = get_path(client->home, client->wd, data);
     fd = open(path, O_RDONLY);
     free(path);
     if (fd == -1)

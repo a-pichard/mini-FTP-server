@@ -28,7 +28,8 @@ SRC	=	src/main.c	\
 		src/cmd/noop.c	\
 		src/cmd/pasv.c	\
 		src/cmd/port.c	\
-		src/cmd/retr.c
+		src/cmd/retr.c	\
+		src/cmd/cwd.c
 
 OBJ	=	$(SRC:.c=.o)
 

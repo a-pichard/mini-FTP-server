@@ -20,6 +20,7 @@ void user(char *data, client_t *client, user_t *users, int nusr)
         return;
     }
     client->username = strdup(data);
+    raise_error(client->username != NULL, "strdup() ");
     if (client->password == NULL)
         respond_to(client->fd, "331 User name okay, need password.\r\n");
     else

@@ -6,6 +6,7 @@
 */
 
 #include "cmd.h"
+#include "errors.h"
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -28,6 +29,7 @@ void check_user(client_t *client, user_t *user)
     if (!strcmp(upass, "") || !strcmp(upass, cpass)) {
         client->is_logged = true;
         client->home = strdup(user->home);
+        raise_error(client->home != NULL, "strdup() ");
         respond_to(client->fd, "230 User logged in, proceed.\r\n");
     } else {
         reset_credentials(client);
