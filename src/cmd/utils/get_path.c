@@ -25,7 +25,7 @@ static char *super_strcat(const char *s1, const char *s2, const char *s3)
     res[i++] = '/';
     for (; s2[j] != '\0'; j++)
         res[i + j] = s2[j];
-    res[i++ + j] = '/';
+    res[i++ + j] = ((s3 == NULL) ? '\0' : '/');
     if (s3 != NULL) {
         for (; s3[k] != '\0'; k++)
             res[i + j + k] = s3[k];

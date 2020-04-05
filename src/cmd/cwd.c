@@ -20,7 +20,6 @@ void cwd(client_t *client, char *data)
     if (!data || !strcmp(data, ""))
         return (respond_to(client->fd, "550 Failed to change directory.\r\n"));
     tmp = get_path(client->home, client->wd, data);
-    dprintf(1, "%s\n", tmp);
     parsed = realpath(tmp, NULL);
     free(tmp);
     if (parsed == NULL)
