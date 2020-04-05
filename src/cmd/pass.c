@@ -13,13 +13,13 @@
 void pass(char *data, client_t *client, user_t *users, int nusr)
 {
     if (client->is_logged) {
-        respond_to(client->fd, "501 Reauthentication not supported.\r\n");
+        write_q(client, "501 Reauthentication not supported.\r\n", false);
         return;
     }
     client->password = !!data ? strdup(data) : NULL;
     raise_error(!data || (!!data && !!client->password), "strdup() ");
     if (client->username == NULL)
-        respond_to(client->fd, "332 Need account for login.\r\n");
+        write_q(client, "332 Need account for login.\r\n", false);
     else
         auth(client, users, nusr);
 }

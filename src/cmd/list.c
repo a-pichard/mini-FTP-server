@@ -18,7 +18,7 @@ static char *get_cmd(client_t *client, const char *data)
     char *cmd;
 
     if (client->mode == NOMODE || client->data_fd == -1) {
-        respond_to(client->fd, "425 Use PORT or PASV first.\r\n");
+        write_q(client, "425 Use PORT or PASV first.\r\n", false);
         return (NULL);
     }
     path = get_path(client->home, client->wd, (data == NULL) ? "." : data);
@@ -101,7 +101,7 @@ void list(client_t *client, char *data)
 
     if (cmd == NULL)
         return;
-    respond_to(client->fd, ok_msg);
+    write_q(client, ok_msg, false);
     if (!!(fork())) {
         free(cmd);
         close(client->data_fd);

@@ -13,16 +13,16 @@
 void user(char *data, client_t *client, user_t *users, int nusr)
 {
     if (client->is_logged) {
-        respond_to(client->fd, "501 Reauthentication not supported.\r\n");
+        write_q(client, "501 Reauthentication not supported.\r\n", false);
         return;
     } else if (!data || (!!data && !strlen(data))) {
-        respond_to(client->fd, "530 Permission denied.\r\n");
+        write_q(client, "530 Permission denied.\r\n", false);
         return;
     }
     client->username = strdup(data);
     raise_error(client->username != NULL, "strdup() ");
     if (client->password == NULL)
-        respond_to(client->fd, "331 User name okay, need password.\r\n");
+        write_q(client, "331 User name okay, need password.\r\n", false);
     else
         auth(client, users, nusr);
 }

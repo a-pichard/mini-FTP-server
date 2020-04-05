@@ -10,5 +10,5 @@
 
 void noop(client_t *client, char *data UNUSED)
 {
-    respond_to(client->fd, "200 Command okay.\r\n");
+    write_q(client, "200 Command okay.\r\n", false);
 }

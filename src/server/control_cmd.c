@@ -16,7 +16,7 @@ static cmd_t index_of(const char **narr, cmd_t *funcs, char *cmd)
     cmd_t command = NULL;
 
     while (narr[i] != NULL) {
-        if (!strcmp(narr[i], cmd)) {
+        if (!strcasecmp(narr[i], cmd)) {
             command = funcs[i];
             break;
         }
@@ -33,13 +33,13 @@ void control_cmds(client_t *client, char *cmd, char *data)
     const char *narr[] = {"PWD", "NOOP", "PASV", "PORT", "RETR", "CWD", "CDUP", "LIST", NULL};
 
     if (!client->is_logged) {
-        respond_to(client->fd, "530 Please login with USER and PASS.\r\n");
+        write_q(client, "530 Please login with USER and PASS.\r\n", false);
         free(cmd);
         return;
     }
     func = index_of(narr, funcs, cmd);
     if (!func) {
-        respond_to(client->fd, "500 Unknown command.\r\n");
+        write_q(client, "500 Unknown command.\r\n", false);
     } else
         (func)(client, data);
 }

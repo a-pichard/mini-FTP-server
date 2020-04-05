@@ -30,10 +30,10 @@ void check_user(client_t *client, user_t *user)
         client->is_logged = true;
         client->home = strdup(user->home);
         raise_error(client->home != NULL, "strdup() ");
-        respond_to(client->fd, "230 User logged in, proceed.\r\n");
+        write_q(client, "230 User logged in, proceed.\r\n", false);
     } else {
         reset_credentials(client);
-        respond_to(client->fd, "530 Login incorrect.\r\n");
+        write_q(client, "530 Login incorrect.\r\n", false);
     }
 }
 
@@ -46,5 +46,5 @@ void auth(client_t *client, user_t *users, int nusr)
         }
     }
     reset_credentials(client);
-    respond_to(client->fd, "530 Login incorrect.\r\n");
+    write_q(client, "530 Login incorrect.\r\n", false);
 }

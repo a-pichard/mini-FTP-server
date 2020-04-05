@@ -11,6 +11,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+void destroy_write_q(write_queue_t *q)
+{
+    write_queue_t *tmp;
+
+    while (q != NULL) {
+        tmp = q->next;
+        free(q->msg);
+        free(q);
+        q = tmp;
+    }
+}
+
 static void destroy_client(client_t *client)
 {
     close(client->fd);
@@ -26,6 +38,7 @@ static void destroy_client(client_t *client)
         free(client->wd);
     if (client->data_fd != -1)
         close(client->data_fd);
+    destroy_write_q(client->write_q);
 }
 
 

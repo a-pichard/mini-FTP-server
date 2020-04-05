@@ -18,7 +18,7 @@ void cdup(client_t *client, char *data UNUSED)
     parsed = realpath(tmp, NULL);
     free(tmp);
     if (parsed == NULL)
-        return (respond_to(client->fd, "550 Failed to change directory.\r\n"));
+        return (write_q(client, "550 Failed to change directory.\r\n", false));
     tmp = get_relative_path(client->home, parsed);
     free(parsed);
     free(client->wd);
@@ -28,5 +28,5 @@ void cdup(client_t *client, char *data UNUSED)
         client->wd = strdup("/");
         raise_error(client->wd != NULL, "strdup() ");
     }
-    respond_to(client->fd, "200 Command okay.\r\n");
+    write_q(client, "200 Command okay.\r\n", false);
 }

@@ -79,7 +79,7 @@ void port(client_t *client, char *data)
     memset(&client->data_info, 0, sizeof(client->data_info));
     if (!fill_sin(data, &client->data_info)) {
         memset(&client->data_info, 0, sizeof(client->data_info));
-        respond_to(client->fd, "500 Missing data connection.\r\n");
+        write_q(client, "500 Missing data connection.\r\n", false);
         return;
     }
     if (client->data_fd != -1)
@@ -87,5 +87,5 @@ void port(client_t *client, char *data)
     client->data_fd = socket(AF_INET, SOCK_STREAM, 0);
     raise_error(client->data_fd != -1, "socket() ");
     client->mode = ACTIVE;
-    respond_to(client->fd, "200 Command okay.\r\n");
+    write_q(client, "200 Command okay.\r\n", false);
 }

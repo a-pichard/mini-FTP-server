@@ -17,6 +17,12 @@
 #include <arpa/inet.h>
 #include <sys/select.h>
 
+typedef struct write_queue_s {
+    char *msg;
+    bool disconnection;
+    struct write_queue_s *next;
+} write_queue_t;
+
 typedef enum {
     PASSIVE,
     ACTIVE,
@@ -41,6 +47,7 @@ typedef struct {
     char *home;
     char *wd;
     bool is_logged;
+    write_queue_t *write_q;
 } client_t;
 
 typedef struct {
@@ -60,8 +67,9 @@ void destroy_server(void);
 int init_main_server_socket(int);
 
 // Server
-void handle_client(fd_set *, server_t *);
+void handle_client(server_t *, int);
 void disconnect_client(server_t *, int);
+void destroy_write_q(write_queue_t *);
 void respond_to(int fd, const char *msg);
 void parse_cmd(char **, const char *, char **, char **);
 void control_cmds(client_t *, char *, char *);
@@ -73,5 +81,9 @@ void run_server(server_t *);
 void new_connection_debug(bool, client_t *);
 void new_request_debug(bool, int, const char *, const char *);
 void new_disconnection_debug(bool, int);
+
+// write queue
+void write_q(client_t *, const char *, bool);
+void send_message(server_t *, int);
 
 #endif /* !SERVER_H_ */

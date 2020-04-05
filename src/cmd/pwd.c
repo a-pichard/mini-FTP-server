@@ -18,6 +18,6 @@ void pwd(client_t *client, char *data UNUSED)
     strcat(res, "227 \"");
     strcat(res, client->wd);
     strcat(res, "\" created.\r\n");
-    respond_to(client->fd, res);
+    write_q(client, res, false);
     free(res);
 }

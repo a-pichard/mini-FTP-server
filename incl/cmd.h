@@ -24,7 +24,7 @@ int accept_connection(int);
 // cmds
 void user(char *, client_t *, user_t *, int);
 void pass(char *, client_t *, user_t *, int);
-void quit(server_t *, int);
+void quit(client_t *);
 void pwd(client_t *, char *);
 void noop(client_t *, char *);
 void pasv(client_t *, char *);

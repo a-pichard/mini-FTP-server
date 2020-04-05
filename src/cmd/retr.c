@@ -20,20 +20,20 @@ static int get_file_fd(client_t *client, const char *data)
     char *ok_msg = "150 File status okay; about to open data connection.\r\n";
 
     if (data == NULL) {
-        respond_to(client->fd, "500 Missing file path.\r\n");
+        write_q(client, "500 Missing file path.\r\n", false);
         return (-1);
     }
     if (client->mode == NOMODE || client->data_fd == -1) {
-        respond_to(client->fd, "425 Use PORT or PASV first.\r\n");
+        write_q(client, "425 Use PORT or PASV first.\r\n", false);
         return (-1);
     }
     path = get_path(client->home, client->wd, data);
     fd = open(path, O_RDONLY);
     free(path);
     if (fd == -1)
-        respond_to(client->fd, "550 Failed to open file.\r\n");
+        write_q(client, "550 Failed to open file.\r\n", false);
     else
-        respond_to(client->fd, ok_msg);
+        write_q(client, ok_msg, false);
     return (fd);
 }
 

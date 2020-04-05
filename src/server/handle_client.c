@@ -17,7 +17,7 @@ static log_f_t index_of(const char **narr, log_f_t *funcs, char *cmd)
     int i = 0;
 
     while (narr[i] != NULL) {
-        if (!strcmp(narr[i], cmd)) {
+        if (!strcasecmp(narr[i], cmd)) {
             free(cmd);
             return (funcs[i]);
         }
@@ -43,7 +43,7 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     if ((func = index_of(log_n, funcs, cmd)) != NULL)
         (func)(data, &serv->clients[id], serv->users, serv->nb_users);
     else if (!strcmp(cmd, "QUIT")) {
-        quit(serv, id);
+        quit(&serv->clients[id]);
         free(cmd);
     } else
         control_cmds(&serv->clients[id], cmd, data);
@@ -51,18 +51,12 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
         free(data);
 }
 
-void handle_client(fd_set *rset, server_t *server)
+void handle_client(server_t *server, int id)
 {
     char buffer[BUFFER_READ_SIZE] = { 0 };
     int ret = 0;
 
-    for (int i = 0; i < server->nb_client; i++) {
-        if (FD_ISSET(server->clients[i].fd, rset)) {
-            FD_CLR(server->clients[i].fd, rset);
-            ret = read(server->clients[i].fd, buffer, BUFFER_READ_SIZE);
-            raise_error(ret >= 0, "read() ");
-            client_request(server, i, ret, buffer);
-            break;
-        }
-    }
+    ret = read(server->clients[id].fd, buffer, BUFFER_READ_SIZE);
+    raise_error(ret >= 0, "read() ");
+    client_request(server, id, ret, buffer);
 }

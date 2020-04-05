@@ -43,6 +43,7 @@ static void destroy_clients(client_t *clients, int nb_clients)
         if (clients[i].data_fd != -1)
             close(clients[i].data_fd);
         close(clients[i].fd);
+        destroy_write_q(clients[i].write_q);
     }
     free(clients);
 }
