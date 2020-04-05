@@ -67,6 +67,8 @@ static void parse_io(server_t *server, fd_set *rset, fd_set *wset)
     for (int i = 0; i < server->nb_client; i++) {
         if (FD_ISSET(server->clients[i].fd, rset))
             handle_client(server, i);
+    }
+    for (int i = 0; i < server->nb_client; i++) {
         if (FD_ISSET(server->clients[i].fd, wset))
             send_message(server, i);
     }
