@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/sendfile.h>
 #include <fcntl.h>
 
 static int get_file_fd(client_t *client, const char *data)
@@ -43,11 +41,11 @@ static bool read_n_write(int file_fd, int data_fd)
 {
     unsigned char buffer[BUFFER_READ_SIZE] = { 0 };
     int ret_read;
-    int ret_write;
+    bool ret_write;
 
     while ((ret_read = read(file_fd, buffer, BUFFER_READ_SIZE)) > 0) {
-        ret_write = write(data_fd, buffer, ret_read);
-        if (ret_write == -1)
+        ret_write = write_in_fork(data_fd, buffer, ret_read);
+        if (ret_write == false)
             return (false);
     }
     return (true);
@@ -67,7 +65,7 @@ static bool send_data(client_t *client, int file_fd)
             return (false);
         status = read_n_write(file_fd, client->data_fd);
     } else if (client->mode == PASSIVE) {
-        if ((fd = accept(client->data_fd, NULL, NULL)) == -1)
+        if ((fd = accept_connection(client->data_fd)) == -1)
             return (false);
         status = read_n_write(file_fd, fd);
         close(fd);
@@ -82,7 +80,7 @@ void retr(client_t *client, char *data)
     if (file_fd == -1)
         return;
     if (!!(fork())) {
-        close (client->data_fd);
+        close(client->data_fd);
         client->data_fd = -1;
         client->mode = NOMODE;
     } else {
