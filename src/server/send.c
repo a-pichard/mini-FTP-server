@@ -48,7 +48,6 @@ void send_message(server_t *server, int id)
     free(client->write_q->msg);
     free(client->write_q);
     client->write_q = next;
-    dprintf(1, "%d\n", client->fd);
     if (disconnection)
         disconnect_client(server, id);
 }

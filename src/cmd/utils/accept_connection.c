@@ -20,7 +20,7 @@ int accept_connection(int fd)
     tv.tv_usec = 0;
     FD_ZERO(&rset);
     FD_SET(fd, &rset);
-    ret = select(fd + 1, NULL, &rset, NULL, &tv);
+    ret = select(fd + 1, &rset, NULL, NULL, &tv);
     if (ret == 0 || !FD_ISSET(fd, &rset))
         return (-1);
     return (accept(fd, NULL, NULL));
