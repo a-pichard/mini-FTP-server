@@ -2,32 +2,31 @@
 ** EPITECH PROJECT, 2020
 ** NWP_myftp_2019
 ** File description:
-** cwd
+** cdup
 */
 
 #include "cmd.h"
 #include "errors.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
-void cwd(client_t *client, char *data)
-{
-    char *tmp;
+void cdup(client_t *client, char *data UNUSED)
+{char *tmp;
     char *parsed;
 
-    if (!data || !strcmp(data, ""))
-        return (respond_to(client->fd, "550 Failed to change directory.\r\n"));
-    tmp = get_path(client->home, client->wd, data);
+    tmp = get_path(client->home, client->wd, "..");
     parsed = realpath(tmp, NULL);
     free(tmp);
     if (parsed == NULL)
         return (respond_to(client->fd, "550 Failed to change directory.\r\n"));
     tmp = get_relative_path(client->home, parsed);
     free(parsed);
+    free(client->wd);
     if (tmp) {
-        free(client->wd);
         client->wd = tmp;
+    } else {
+        client->wd = strdup("/");
+        raise_error(client->wd != NULL, "strdup() ");
     }
-    respond_to(client->fd, "250 Requested file action okay, completed.\r\n");
+    respond_to(client->fd, "200 Command okay.\r\n");
 }

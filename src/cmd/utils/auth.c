@@ -40,7 +40,7 @@ void check_user(client_t *client, user_t *user)
 void auth(client_t *client, user_t *users, int nusr)
 {
     for (int i = 0; i < nusr; i++) {
-        if (!strcmp(client->username, users[i].username)) {
+        if (!strcasecmp(client->username, users[i].username)) {
             check_user(client, &users[i]);
             return;
         }

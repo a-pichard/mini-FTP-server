@@ -29,5 +29,6 @@ void pasv(client_t *, char *);
 void port(client_t *, char *);
 void retr(client_t *, char *);
 void cwd(client_t *, char *);
+void cdup(client_t *, char *);
 
 #endif /* !CMD_H_ */
