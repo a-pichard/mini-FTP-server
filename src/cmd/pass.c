@@ -16,6 +16,8 @@ void pass(char *data, client_t *client, user_t *users, int nusr)
         write_q(client, "501 Reauthentication not supported.\r\n", false);
         return;
     }
+    if (client->password)
+        free(client->password);
     client->password = !!data ? strdup(data) : NULL;
     raise_error(!data || (!!data && !!client->password), "strdup() ");
     if (client->username == NULL)

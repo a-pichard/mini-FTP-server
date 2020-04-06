@@ -13,9 +13,6 @@
 
 void reset_credentials(client_t *client)
 {
-    if (client->username != NULL)
-        free(client->username);
-    client->username = NULL;
     if (client->password != NULL)
         free(client->password);
     client->password = NULL;

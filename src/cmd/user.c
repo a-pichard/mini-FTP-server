@@ -19,6 +19,8 @@ void user(char *data, client_t *client, user_t *users, int nusr)
         write_q(client, "530 Permission denied.\r\n", false);
         return;
     }
+    if (client->username)
+        free(client->username);
     client->username = strdup(data);
     raise_error(client->username != NULL, "strdup() ");
     if (client->password == NULL)
