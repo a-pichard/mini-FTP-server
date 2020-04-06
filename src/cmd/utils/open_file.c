@@ -12,19 +12,28 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int open_file(client_t *c, char *path)
+bool is_regular_file(const char *path)
 {
     struct stat st;
     int ret = stat(path, &st);
+
+    if (ret == -1)
+        return (false);
+    return (S_ISREG(st.st_mode));
+}
+
+int open_file(client_t *c, char *path)
+{
+    int fd;
     char okmsg[] = "150 File status okay; about to open data connection.\r\n";
 
-    if (ret == -1 || !S_ISREG(st.st_mode)) {
+    if (!is_regular_file(path)) {
         write_q(c, "550 Is a directory.\r\n", false);
         free(path);
         return (-1);
     }
-    ret = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY);
     free(path);
-    write_q(c, ((ret == -1) ? "550 Failed to open file.\r\n" : okmsg), false);
-    return (ret);
+    write_q(c, ((fd == -1) ? "550 Failed to open file.\r\n" : okmsg), false);
+    return (fd);
 }

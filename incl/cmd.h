@@ -19,6 +19,7 @@
     "CDUP", \
     "LIST", \
     "STOR", \
+    "DELE", \
     NULL    \
 };
 
@@ -30,7 +31,8 @@
     &cwd,   \
     &cdup,  \
     &list,  \
-    &stor   \
+    &stor,  \
+    &dele   \
 }
 
 #define TIMEOUT_IN_SEC 15
@@ -47,6 +49,7 @@ bool write_in_fork(int, void *, size_t);
 int read_in_fork(int, void *, size_t);
 int accept_connection(int);
 int open_file(client_t *, char *);
+bool is_regular_file(const char *);
 
 // cmds
 void user(char *, client_t *, user_t *, int);
@@ -61,5 +64,6 @@ void cwd(client_t *, char *);
 void cdup(client_t *, char *);
 void list(client_t *, char *);
 void stor(client_t *, char *);
+void dele(client_t *, char *);
 
 #endif /* !CMD_H_ */
