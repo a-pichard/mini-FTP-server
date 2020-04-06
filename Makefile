@@ -35,7 +35,8 @@ SRC	=	src/main.c	\
 		src/cmd/cdup.c	\
 		src/cmd/list.c	\
 		src/cmd/stor.c	\
-		src/cmd/dele.c
+		src/cmd/dele.c	\
+		src/cmd/help.c
 
 OBJ	=	$(SRC:.c=.o)
 

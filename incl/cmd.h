@@ -54,7 +54,8 @@ bool is_regular_file(const char *);
 // cmds
 void user(char *, client_t *, user_t *, int);
 void pass(char *, client_t *, user_t *, int);
-void quit(client_t *);
+void quit(char *, client_t *, user_t *, int);
+void help(char *, client_t *, user_t *, int);
 void pwd(client_t *, char *);
 void noop(client_t *, char *);
 void pasv(client_t *, char *);

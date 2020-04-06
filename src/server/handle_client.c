@@ -30,9 +30,9 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
 {
     char *cmd = NULL;
     char *data = NULL;
-    log_f_t funcs[] = {&user, &pass};
+    log_f_t funcs[] = {&user, &pass, &quit, &help};
     log_f_t func = NULL;
-    const char *log_n[] = {"USER", "PASS", NULL};
+    const char *log_n[] = {"USER", "PASS", "QUIT", "HELP", NULL};
 
     if (ret == 0)
         return disconnect_client(serv, id);
@@ -42,10 +42,7 @@ static void client_request(server_t *serv, int id, int ret, const char *req)
     new_request_debug(serv->debug, serv->clients[id].fd, cmd, data);
     if ((func = index_of(log_n, funcs, cmd)) != NULL)
         (func)(data, &serv->clients[id], serv->users, serv->nb_users);
-    else if (!strcmp(cmd, "QUIT")) {
-        quit(&serv->clients[id]);
-        free(cmd);
-    } else
+    else
         control_cmds(&serv->clients[id], cmd, data);
     if (data != NULL)
         free(data);

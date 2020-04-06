@@ -7,7 +7,7 @@
 
 #include "cmd.h"
 
-void quit(client_t *client)
+void quit(char *d UNUSED, client_t *c, user_t *u UNUSED, int i UNUSED)
 {
-    write_q(client, "221 Service closing control connection.\r\n", true);
+    write_q(c, "221 Service closing control connection.\r\n", true);
 }
