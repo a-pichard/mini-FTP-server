@@ -18,6 +18,7 @@
     "CWD",  \
     "CDUP", \
     "LIST", \
+    "STOR", \
     NULL    \
 };
 
@@ -28,7 +29,8 @@
     &retr,  \
     &cwd,   \
     &cdup,  \
-    &list   \
+    &list,  \
+    &stor   \
 }
 
 #define TIMEOUT_IN_SEC 15
@@ -42,6 +44,7 @@ void auth(client_t *, user_t *, int);
 char *get_path(const char *, const char *, const char *);
 char *get_relative_path(const char *, const char *);
 bool write_in_fork(int, void *, size_t);
+int read_in_fork(int, void *, size_t);
 int accept_connection(int);
 
 // cmds
@@ -56,5 +59,6 @@ void retr(client_t *, char *);
 void cwd(client_t *, char *);
 void cdup(client_t *, char *);
 void list(client_t *, char *);
+void stor(client_t *, char *);
 
 #endif /* !CMD_H_ */

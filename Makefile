@@ -21,8 +21,7 @@ SRC	=	src/main.c	\
 		src/server/send.c	\
 		src/cmd/utils/auth.c	\
 		src/cmd/utils/get_path.c	\
-		src/cmd/utils/write_fork.c	\
-		src/cmd/utils/accept_connection.c	\
+		src/cmd/utils/fork.c	\
 		src/cmd/user.c	\
 		src/cmd/pass.c	\
 		src/cmd/quit.c	\
@@ -33,7 +32,8 @@ SRC	=	src/main.c	\
 		src/cmd/retr.c	\
 		src/cmd/cwd.c	\
 		src/cmd/cdup.c	\
-		src/cmd/list.c
+		src/cmd/list.c	\
+		src/cmd/stor.c
 
 OBJ	=	$(SRC:.c=.o)
 
