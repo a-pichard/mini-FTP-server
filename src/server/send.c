@@ -51,8 +51,3 @@ void send_message(server_t *server, int id)
     if (disconnection)
         disconnect_client(server, id);
 }
-
-void respond_to(int fd, const char *msg)
-{
-    write(fd, msg, strlen(msg));
-}
