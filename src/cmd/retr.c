@@ -16,8 +16,6 @@
 static int get_file_fd(client_t *client, const char *data)
 {
     char *path;
-    int fd;
-    char okmsg[] = "150 File status okay; about to open data connection.\r\n";
 
     if (data == NULL) {
         write_q(client, "500 Missing file path.\r\n", false);
@@ -28,13 +26,7 @@ static int get_file_fd(client_t *client, const char *data)
         return (-1);
     }
     path = get_path(client->home, client->wd, data);
-    fd = open(path, O_RDONLY);
-    free(path);
-    if (fd == -1)
-        write_q(client, "550 Failed to open file.\r\n", false);
-    else
-        write_q(client, okmsg, false);
-    return (fd);
+    return (open_file(client, path));
 }
 
 static bool read_n_write(int file_fd, int data_fd)
