@@ -97,11 +97,11 @@ static void compute_list(client_t *client, const char *cmd)
 void list(client_t *client, char *data)
 {
     char *cmd = get_cmd(client, data);
-    char *ok_msg = "150 File status okay; about to open data connection.\r\n";
+    char okmsg[] = "150 File status okay; about to open data connection.\r\n";
 
     if (cmd == NULL)
         return;
-    write_q(client, ok_msg, false);
+    write_q(client, okmsg, false);
     if (!!(fork())) {
         free(cmd);
         close(client->data_fd);

@@ -32,6 +32,7 @@ static void accept_new_client_connection(server_t *server)
     int client_sock;
     int idx = server->nb_client;
     struct sockaddr *client_info;
+    char *ok_msg = "220 Service ready for new user.\r\n";
 
     server->clients = realloc(server->clients, sizeof(client_t) * (idx + 1));
     raise_error(server->clients != NULL, "realloc()) ");
@@ -41,7 +42,7 @@ static void accept_new_client_connection(server_t *server)
     client_sock = accept(server->server_fd, client_info, &size);
     raise_error(client_sock != -1, "accept() ");
     init_new_client(&server->clients[idx], client_sock);
-    write_q(&server->clients[idx], "220 Service ready for new user.\r\n", false);
+    write_q(&server->clients[idx], ok_msg, false);
     new_connection_debug(server->debug, &server->clients[idx]);
 }
 

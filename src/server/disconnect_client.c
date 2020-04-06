@@ -62,7 +62,7 @@ void disconnect_client(server_t *server, int id)
     server->nb_client -= 1;
     if (empty(server))
         return;
-    clients = malloc(sizeof(client_t) * (server->nb_client)); 
+    clients = malloc(sizeof(client_t) * (server->nb_client));
     raise_error(clients != NULL, "malloc() ");
     for (int i = 0; i < (server->nb_client + 1); i++) {
         if (i != id) {

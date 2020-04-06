@@ -10,6 +10,27 @@
 
 #include "server.h"
 
+#define F_NAME {"PWD",  \
+    "NOOP", \
+    "PASV", \
+    "PORT", \
+    "RETR", \
+    "CWD",  \
+    "CDUP", \
+    "LIST", \
+    NULL    \
+};
+
+#define F_FUNC {&pwd,   \
+    &noop,  \
+    &pasv,  \
+    &port,  \
+    &retr,  \
+    &cwd,   \
+    &cdup,  \
+    &list   \
+}
+
 // index of functions pointer
 typedef void (*log_f_t)(char *, client_t *, user_t *, int);
 typedef void (*cmd_t)(client_t *, char *);

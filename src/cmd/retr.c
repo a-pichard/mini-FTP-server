@@ -17,7 +17,7 @@ static int get_file_fd(client_t *client, const char *data)
 {
     char *path;
     int fd;
-    char *ok_msg = "150 File status okay; about to open data connection.\r\n";
+    char okmsg[] = "150 File status okay; about to open data connection.\r\n";
 
     if (data == NULL) {
         write_q(client, "500 Missing file path.\r\n", false);
@@ -33,7 +33,7 @@ static int get_file_fd(client_t *client, const char *data)
     if (fd == -1)
         write_q(client, "550 Failed to open file.\r\n", false);
     else
-        write_q(client, ok_msg, false);
+        write_q(client, okmsg, false);
     return (fd);
 }
 

@@ -10,8 +10,8 @@
 
 void helper(const char *prg_name, int exit_status)
 {
-    dprintf(1, "USAGE: %s port path\n", prg_name);
-    dprintf(1, "\tport is the port number on which the server socket listens\n");
-    dprintf(1, "\tpath is the path to the home directory for the Anonymous user\n");
+    dprintf(1, "USAGE: %s port path\n\tport is the port number", prg_name);
+    dprintf(1, " on which the server socket listens\n\tpath is the");
+    dprintf(1, " path to the home directory for the Anonymous user\n");
     exit(exit_status);
 }
