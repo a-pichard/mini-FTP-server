@@ -5,6 +5,7 @@
 ** accept_connection
 */
 
+#include "cmd.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sys/socket.h>
@@ -16,7 +17,7 @@ int accept_connection(int fd)
     struct timeval tv;
     int ret;
 
-    tv.tv_sec = 15;
+    tv.tv_sec = TIMEOUT_IN_SEC;
     tv.tv_usec = 0;
     FD_ZERO(&rset);
     FD_SET(fd, &rset);

@@ -31,6 +31,8 @@
     &list   \
 }
 
+#define TIMEOUT_IN_SEC 15
+
 // index of functions pointer
 typedef void (*log_f_t)(char *, client_t *, user_t *, int);
 typedef void (*cmd_t)(client_t *, char *);

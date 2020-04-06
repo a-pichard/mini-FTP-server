@@ -5,6 +5,7 @@
 ** write_fork
 */
 
+#include "cmd.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sys/select.h>
@@ -16,7 +17,7 @@ bool write_in_fork(int fd, void *data, size_t size)
     struct timeval tv;
     int ret;
 
-    tv.tv_sec = 15;
+    tv.tv_sec = TIMEOUT_IN_SEC;
     tv.tv_usec = 0;
     FD_ZERO(&wset);
     FD_SET(fd, &wset);
