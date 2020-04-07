@@ -41,10 +41,8 @@ void dele(client_t *c, char *data)
     char *parsed;
     int ret;
 
-    if (!data || !strlen(data)) {
-        write_q(c, "501 Invalid number of parameters.\r\n", false);
-        return;
-    }
+    if (!data || !strlen(data))
+        return write_q(c, "501 Invalid number of parameters.\r\n", false);
     tmp = get_path(c->home, c->wd, data);
     parsed = realpath(tmp, NULL);
     free(tmp);

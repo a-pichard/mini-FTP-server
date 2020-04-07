@@ -51,9 +51,9 @@ char *get_relative_path(const char *h, const char *parsed)
             path = strdup("/");
         else
             path = strdup(&parsed[strlen(h)]);
-        raise_error(path != NULL, "strdup() ");
-        return (path);
     } else {
-        return (NULL);
+        path = strdup("/");
     }
+    raise_error(path != NULL, "strdup() ");
+    return (path);
 }
