@@ -9,7 +9,6 @@
 #include "errors.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <fcntl.h>
 
 static int get_file_fd(client_t *client, const char *data)
@@ -27,7 +26,7 @@ static int get_file_fd(client_t *client, const char *data)
         return (-1);
     }
     path = get_path(client->home, client->wd, data);
-    fd = open(path, O_WRONLY | O_CREAT | O_TRUNC);
+    fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     free(path);
     if (fd == -1)
         write_q(client, "550 Failed to create file.\r\n", false);

@@ -9,12 +9,10 @@
 #include "errors.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
 #include <fcntl.h>
 #include <string.h>
 
-static int get_file_fd(client_t *client, const char *data)
+static int get_file_fd(client_t *client, const char *data, int flags)
 {
     char *path;
     char *real_path;
@@ -31,7 +29,7 @@ static int get_file_fd(client_t *client, const char *data)
     real_path = realpath(path, NULL);
     free(path);
     if (real_path == strstr(real_path, client->home))
-        return (open_file(client, path));
+        return (open_file(client, path, flags));
     else {
         free(real_path);
         write_q(client, "500 Could not find file.\r\n", false);
@@ -77,7 +75,7 @@ static bool send_data(client_t *client, int file_fd)
 
 void retr(client_t *client, char *data)
 {
-    int file_fd = get_file_fd(client, data);
+    int file_fd = get_file_fd(client, data, O_RDONLY);
 
     if (file_fd == -1)
         return;
