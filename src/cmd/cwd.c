@@ -10,24 +10,39 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
-void cwd(client_t *client, char *data)
+static char *get_path_cwd(client_t *client, const char *data)
 {
     char *tmp;
     char *parsed;
+    struct stat st;
 
-    if (!data || !strcmp(data, ""))
-        return (write_q(client, "550 Failed to change directory.\r\n", false));
     tmp = get_path(client->home, client->wd, data);
     parsed = realpath(tmp, NULL);
     free(tmp);
-    if (parsed == NULL)
-        return (write_q(client, "550 Failed to change directory.\r\n", false));
+    if (parsed == NULL || stat(parsed, &st) != 0 || !S_ISDIR(st.st_mode)) {
+        if (parsed != NULL)
+            free(parsed);
+        return (NULL);
+    }
     tmp = get_relative_path(client->home, parsed);
     free(parsed);
-    if (tmp) {
+    return (tmp);
+}
+
+void cwd(client_t *client, char *data)
+{
+    char *path;
+    char okmsg[] = "250 Requested file action okay, completed.\r\n";
+
+    if (!data || !strcmp(data, ""))
+        return (write_q(client, "550 Failed to change directory.\r\n", false));
+    path = get_path_cwd(client, data);
+    if (path) {
         free(client->wd);
-        client->wd = tmp;
-    }
-    write_q(client, "250 Requested file action okay, completed.\r\n", false);
+        client->wd = path;
+        write_q(client, okmsg, false);
+    } else
+        write_q(client, "550 Failed to change directory.\r\n", false);
 }
