@@ -23,6 +23,7 @@ static char *get_cmd(client_t *client, const char *data)
     }
     path = get_path(client->home, client->wd, (data == NULL) ? "." : data);
     cmd = malloc(sizeof(char) * (strlen(path) + 7));
+    raise_error(cmd != NULL, "malloc() ");
     strcpy(cmd, "ls -l ");
     strcat(cmd, path);
     free(path);
