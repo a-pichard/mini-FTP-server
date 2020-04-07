@@ -12,10 +12,12 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <string.h>
 
 static int get_file_fd(client_t *client, const char *data)
 {
     char *path;
+    char *real_path;
 
     if (data == NULL) {
         write_q(client, "500 Missing file path.\r\n", false);
@@ -26,7 +28,15 @@ static int get_file_fd(client_t *client, const char *data)
         return (-1);
     }
     path = get_path(client->home, client->wd, data);
-    return (open_file(client, path));
+    real_path = realpath(path, NULL);
+    free(path);
+    if (real_path == strstr(real_path, client->home))
+        return (open_file(client, path));
+    else {
+        free(real_path);
+        write_q(client, "500 Could not find file.\r\n", false);
+        return (-1);
+    }
 }
 
 static bool read_n_write(int file_fd, int data_fd)
