@@ -8,6 +8,7 @@
 #include "cmd.h"
 #include "errors.h"
 #include <unistd.h>
+#include <stdlib.h>
 #include <string.h>
 
 void user(char *data, client_t *client, user_t *users, int nusr)
