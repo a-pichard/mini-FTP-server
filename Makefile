@@ -23,6 +23,7 @@ SRC	=	src/main.c	\
 		src/cmd/utils/get_path.c	\
 		src/cmd/utils/fork.c	\
 		src/cmd/utils/open_file.c	\
+		src/cmd/utils/list_utils.c	\
 		src/cmd/user.c	\
 		src/cmd/pass.c	\
 		src/cmd/quit.c	\

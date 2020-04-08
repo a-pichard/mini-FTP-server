@@ -49,6 +49,7 @@ bool write_in_fork(int, void *, size_t);
 int read_in_fork(int, void *, size_t);
 int accept_connection(int);
 int open_file(client_t *, char *, int);
+char *get_cmd_line(const char *);
 
 // cmds
 void user(char *, client_t *, user_t *, int);

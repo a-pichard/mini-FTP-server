@@ -15,6 +15,7 @@
 static char *get_cmd(client_t *client, const char *data)
 {
     char *path;
+    char *real_path;
     char *cmd;
 
     if (client->mode == NOMODE || client->data_fd == -1) {
@@ -22,10 +23,15 @@ static char *get_cmd(client_t *client, const char *data)
         return (NULL);
     }
     path = get_path(client->home, client->wd, (data == NULL) ? "." : data);
-    cmd = malloc(sizeof(char) * (strlen(path) + 7));
-    raise_error(cmd != NULL, "malloc() ");
-    strcpy(cmd, "ls -l ");
-    strcat(cmd, path);
+    if ((real_path = realpath(path, NULL)) == NULL) {
+        cmd = get_cmd_line(path);
+    } else if (real_path != strstr(real_path, client->home)) {
+        free(real_path);
+        cmd = get_cmd_line(client->home);
+    } else {
+        cmd = get_cmd_line(real_path);
+        free(real_path);
+    }
     free(path);
     return (cmd);
 }
