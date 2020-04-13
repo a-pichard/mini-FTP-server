@@ -29,7 +29,7 @@ static int get_file_fd(client_t *client, const char *data, int flags)
     real_path = realpath(path, NULL);
     free(path);
     if (real_path == strstr(real_path, client->home))
-        return (open_file(client, path, flags));
+        return (open_file(client, real_path, flags));
     else {
         free(real_path);
         write_q(client, "500 Could not find file.\r\n", false);
