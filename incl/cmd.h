@@ -20,6 +20,8 @@
     "LIST", \
     "STOR", \
     "DELE", \
+    "SYST", \
+    "TYPE", \
     NULL    \
 };
 
@@ -32,7 +34,9 @@
     &cdup,  \
     &list,  \
     &stor,  \
-    &dele   \
+    &dele,  \
+    &syst,  \
+    &type   \
 }
 
 #define TIMEOUT_IN_SEC 15
@@ -66,5 +70,7 @@ void cdup(client_t *, char *);
 void list(client_t *, char *);
 void stor(client_t *, char *);
 void dele(client_t *, char *);
+void syst(client_t *, char *);
+void type(client_t *, char *);
 
 #endif /* !CMD_H_ */

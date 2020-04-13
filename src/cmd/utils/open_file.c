@@ -24,7 +24,7 @@ static bool is_regular_file(const char *path)
 int open_file(client_t *c, char *path, int flags)
 {
     int fd;
-    char okmsg[] = "150 File status okay; about to open data connection.\r\n";
+    char okmsg[] = "150 Opening BINARY mode data connection.\r\n";
 
     if (!is_regular_file(path)) {
         write_q(c, "550 Is a directory.\r\n", false);
