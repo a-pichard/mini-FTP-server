@@ -11,7 +11,8 @@
 #include <string.h>
 
 void cdup(client_t *client, char *data UNUSED)
-{char *tmp;
+{
+    char *tmp;
     char *parsed;
 
     tmp = get_path(client->home, client->wd, "..");
