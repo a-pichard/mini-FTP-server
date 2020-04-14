@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-static bool isStrDigit(const char *str)
+static bool is_str_digit(const char *str)
 {
     int i = 0;
 
@@ -25,7 +25,7 @@ static bool isStrDigit(const char *str)
 void input_error_handling(int ac, char **av)
 {
     if (ac == 3) {
-        if (!isStrDigit(av[1]))
+        if (!is_str_digit(av[1]))
             helper(av[0], 84);
         if (access(av[2], F_OK | R_OK | W_OK) == -1)
             helper(av[0], 84);
