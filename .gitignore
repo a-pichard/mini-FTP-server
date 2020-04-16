@@ -4,8 +4,11 @@ myftp
 mdr
 tmp
 .bashrc
-tests/client_files
-tests/server_files
+tests/client_files/*.txt
+tests/client_files/*.pdf
+tests/server_files/*.txt
+tests/server_files/*.pdf
 *.gcda
 *.gcno
 unit_tests
+*.pyc
