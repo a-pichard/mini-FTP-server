@@ -293,6 +293,20 @@ if __name__ == '__main__' :
 		print ('Failed')
 	else:
 		print ('Delete Success')
+	
+	print ('\033[92m\033[1m########### Buffer ###########\033[0m') # Buffer
+	bufferFlag = True
+	server_socket.send('P')
+	server_socket.send('WD')
+	server_socket.send('\r\n')
+	print ('try: PWD')
+	data = server_socket.recv(size)
+	print (data[0:-2])
+	if data[0] != '2':
+		bufferFlag = False
+		print ('Failed')
+	else:
+		print ('Buffer ok')
 
 	print ('')
 	print ('\033[92m\033[1m########### Summary ###########\033[0m') # SUMMARY
@@ -304,5 +318,7 @@ if __name__ == '__main__' :
 	summary('passive mode upload', passiveStoreFlag)
 	summary('passive mode download', passiveRetrieveFlag)
 	summary('file comapre', fileCompareFlag)
+	summary('delete file', deleteFlag)
+	summary('buffer', bufferFlag)
 	time.sleep(1)
 	server_socket.close() # Close connection
