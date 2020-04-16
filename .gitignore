@@ -6,3 +6,6 @@ tmp
 .bashrc
 tests/client_files
 tests/server_files
+*.gcda
+*.gcno
+unit_tests
