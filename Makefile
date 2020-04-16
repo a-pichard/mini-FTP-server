@@ -55,17 +55,15 @@ $(NAME):	$(OBJ)
 	gcc -o $(NAME) $(OBJ) $(CFLAGS)
 
 clean:
-	rm -f $(OBJ) *.gc*
-	rm -r tests/client_files
-	rm -r tests/server_files
+	rm -f $(OBJ) *.gc* tests/client_files/* tests/server_files/*
 
 fclean:	clean
 	rm -f $(NAME) $(TEST_NAME)
 
 re:	fclean all
 
-tests_run:
-	mkdir tests/client_files tests/server_files
+tests_run: clean
+	mkdir tests/client_files tests/server_files; echo ""
 	cp tests/transfer_files_test/client* tests/client_files
 	cp tests/transfer_files_test/server* tests/server_files
 	gcc -o $(TEST_NAME) $(SRC) --coverage $(CFLAGS)
