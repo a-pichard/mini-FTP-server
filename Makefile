@@ -43,19 +43,30 @@ SRC	=	src/main.c	\
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-Iincl -Wall -Wextra -g
+CFLAGS	=	-Iincl -Wall -Wextra
 
 NAME	=	myftp
+
+TEST_NAME	=	unit_tests
 
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CFLAGS) -g
+	gcc -o $(NAME) $(OBJ) $(CFLAGS)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) *.gc*
+	rm -r tests/client_files
+	rm -r tests/server_files
 
 fclean:	clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(TEST_NAME)
 
 re:	fclean all
+
+tests_run:
+	mkdir tests/client_files tests/server_files
+	cp tests/transfer_files_test/client* tests/client_files
+	cp tests/transfer_files_test/server* tests/server_files
+	gcc -o $(TEST_NAME) $(SRC) --coverage $(CFLAGS)
+	tests/run_tests.sh
