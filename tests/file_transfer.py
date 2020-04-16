@@ -82,20 +82,20 @@ def passive_download(server_socket, client_home, size):
     print ('download server_file1.pdf as from_server1.pdf')
     passiveRetrieveFlag = True
     try:
-    	s = pasv(server_socket, size)
-    	time.sleep(1)
-    	server_socket.send('RETR server_file1.pdf' + '\r\n')
+        s = pasv(server_socket, size)
+        time.sleep(1)
+        server_socket.send('RETR server_file1.pdf' + '\r\n')
         print (server_socket.recv(size))
-    	testFile = open(client_home + 'from_server1.pdf', 'w')
-    	while True:
-    		data = s.recv(size)
-    		if(data):
-    			testFile.write(data)
-    		else:
-    			break
-    	print (server_socket.recv(size))
-    	testFile.close()
-    	s.close()
+        testFile = open(client_home + 'from_server1.pdf', 'w')
+        while True:
+            data = s.recv(size)
+            if(data):
+                testFile.write(data)
+            else:
+                break
+        print (server_socket.recv(size))
+        testFile.close()
+        s.close()
     except:
     	print ('Fail!!')
     	passiveRetrieveFlag = False
