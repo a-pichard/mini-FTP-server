@@ -12,7 +12,8 @@ import re
 clientAddress = '127.0.0.1'
 serverAddress = '127.0.0.1'
 serverPort = 6969
-users = { 'Anonymous':''}
+name = 'Anonymous'
+passwd = ''
 
 client_home = "tests/client_files/"
 server_home = "tests/server_files/"
@@ -57,199 +58,171 @@ def summary(title, flag):
 
 
 if __name__ == '__main__' :
-	sockets = {}
+	server_socket = {}
 
-	print ('\033[92m\033[1m########### authentication test ###########\033[0m')
-	for name in users:
-		print ('name:', name, 'password:', users[name])
+	print ('\033[92m\033[1m########### authentication test ###########\033[0m') # AUTH
+	print ('name:', name, 'password:', passwd)
 
-		try:
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			s.connect( (serverAddress, serverPort) )
-			sockets[name] = s
-			print ('using socket', s.getsockname())
-		except:
-			print ("can't connect to server, double check address and port")
+	try:
+		server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		server_socket.connect( (serverAddress, serverPort) )
+		print ('using socket', server_socket.getsockname())
+	except:
+		print ("can't connect to server, double check address and port")
 
 	print ('------------------------------------')
-	
-# authentication
+
 	authenticationFlag = True
-	for name in sockets:
-		s = sockets[name]
-		s.recv(size)
-		s.send('USER ' + name + '\r\n')
-		s.recv(size)
-		s.send('PASS ' + users[name] + '\r\n')
-		data = s.recv(size)
-		print (name, '[', data[0:-2], ']')
-		
-		if not data:
-			data = ' '
-		if data[0] != '2' and name != 'doesnotexist':
-			authenticationFlag = False
-		if data[0] == '2' and name == 'doesnotexist':
-			authenticationFlag = False
+	server_socket.recv(size)
+	server_socket.send('USER ' + name + '\r\n')
+	server_socket.recv(size)
+	server_socket.send('PASS ' + passwd + '\r\n')
+	data = server_socket.recv(size)
+	print (name, '[', data[0:-2], ']')
+	
+	if not data:
+		data = ' '
+	if data[0] != '2' and name != 'doesnotexist':
+		authenticationFlag = False
+	if data[0] == '2' and name == 'doesnotexist':
+		authenticationFlag = False
 
-	print ('\n\033[92m\033[1m########### pwd, cwd, cdup ###########\033[0m')
-	for name in sockets:
-		
-		s = sockets[name]
+	print ('\n\033[92m\033[1m########### pwd, cwd, cdup ###########\033[0m') # COMMON COMMANDS
 
-		s.send('PWD' + '\r\n')
-		print ('try: pwd')
-		print (s.recv(size)[0:-2])
+	server_socket.send('PWD' + '\r\n')
+	print ('try: pwd')
+	print (server_socket.recv(size)[0:-2])
 
-		s.send('CWD ' + 'tests/server_files' + '\r\n')
-		print ('try: cd ', 'tests/server_files')
-		print (s.recv(size)[0:-2])
+	server_socket.send('CWD ' + 'tests/server_files' + '\r\n')
+	print ('try: cd ', 'tests/server_files')
+	print (server_socket.recv(size)[0:-2])
 
-		s.send('CDUP' + '\r\n')
-		print ('try: cdup')
-		print (s.recv(size)[0:-2])
+	server_socket.send('CDUP' + '\r\n')
+	print ('try: cdup')
+	print (server_socket.recv(size)[0:-2])
 
-		s.send('CWD ' + 'server_files' + '\r\n')
-		print ('try: cd ', 'server_files')
-		print (s.recv(size)[0:-2])
+	server_socket.send('CWD ' + 'server_files' + '\r\n')
+	print ('try: cd ', 'server_files')
+	print (server_socket.recv(size)[0:-2])
 
-		s.send('PWD' + '\r\n')
-		print ('try: pwd')
-		print (s.recv(size)[0:-2])
+	server_socket.send('PWD' + '\r\n')
+	print ('try: pwd')
+	print (server_socket.recv(size)[0:-2])
 
 
-	print ('\n\033[92m\033[1m########### active mode LIST ###########\033[0m')
+	print ('\n\033[92m\033[1m########### active mode LIST ###########\033[0m') # ACTIVE LIST
 	listFlag = True
-# port & list
-	for name in sockets:
-		s = port(sockets[name])
-		time.sleep(1)	
-		sockets[name].send('LIST\r\n')
-		try:
-			connect, address = s.accept()
-			time.sleep(1)
-			data = connect.recv(size)
-			print ('LIST format:')
-			print ('------------------------------------')
-			print (data)
-			print ('------------------------------------')
-			print (sockets[name].recv(size))
-			connect.close()
-		except:
-			print ('Fail!!')
-			listFlag = False
-		s.close()
-		break		# test once
+	s = port(server_socket)
+	time.sleep(1)	
+	server_socket.send('LIST\r\n')
+	try:
+		connect, address = s.accept()
+		time.sleep(1)
+		data = connect.recv(size)
+		print ('LIST format:')
+		print ('------------------------------------')
+		print (data)
+		print ('------------------------------------')
+		print (server_socket.recv(size))
+		connect.close()
+	except:
+		print ('Fail!!')
+		listFlag = False
+	s.close()
 
-	print ('\033[92m\033[1m########### active mode STOR ###########\033[0m')
+	print ('\033[92m\033[1m########### active mode STOR ###########\033[0m') # ACTIVE UPLOAD
 	print ('upload client_file.txt as from_client.txt')
-	fileSize = os.path.getsize(client_home + '/client_file.txt')
-	totalTraffic = 0	# Byte
-# port & stor
 	activeStoreFlag = True
-	for name in sockets:
-		s = port(sockets[name])
-		time.sleep(1)	# bug reminder
-		sockets[name].send('STOR from_client.txt' + '\r\n')
-		try:
-			connect, address = s.accept()
-			testFile = file(client_home + '/client_file.txt')
-			while True:
-				data = testFile.read(size)
-				if(data):
-					connect.send(data)
-				else:
-					break
-			print (sockets[name].recv(size))
-			testFile.close()
-			connect.close()
-			print (sockets[name].recv(size))
-		except:
-			print ('Fail!!')
-			activeStoreFlag = False
-		s.close()
-		break		# test once 
+	s = port(server_socket)
+	time.sleep(1)
+	server_socket.send('STOR from_client.txt' + '\r\n')
+	try:
+		connect, address = s.accept()
+		testFile = file(client_home + '/client_file.txt')
+		while True:
+			data = testFile.read(size)
+			if(data):
+				connect.send(data)
+			else:
+				break
+		print (server_socket.recv(size))
+		testFile.close()
+		connect.close()
+		print (server_socket.recv(size))
+	except:
+		print ('Fail!!')
+		activeStoreFlag = False
+	s.close()
 		
 
-	print ('\n\033[92m\033[1m########### active mode RETR ###########\033[0m')
+	print ('\n\033[92m\033[1m########### active mode RETR ###########\033[0m') # ACTIVE DOWNLOAD
 	print ('download server_file.txt as from_server.txt')
-# port & retr
 	activeRetrieveFlag = True
-	for name in sockets:
-		s = port(sockets[name])
-		time.sleep(1)
-		sockets[name].send('RETR server_file.txt' + '\r\n')
-		try:
-			connect, address = s.accept()
-			testFile = open(client_home + '/from_server.txt', 'w')
-			while True:
-				data = connect.recv(size)
-				if(data):
-					testFile.write(data)
-				else:
-					break
-			print (sockets[name].recv(size))
-			testFile.close()
-			connect.close()
-		except:
-			print ('Fail!!')
-			activeRetrieveFlag = False
-		s.close()
-		break		# test once
+	s = port(server_socket)
+	time.sleep(1)
+	server_socket.send('RETR server_file.txt' + '\r\n')
+	try:
+		connect, address = s.accept()
+		testFile = open(client_home + '/from_server.txt', 'w')
+		while True:
+			data = connect.recv(size)
+			if(data):
+				testFile.write(data)
+			else:
+				break
+		print (server_socket.recv(size))
+		testFile.close()
+		connect.close()
+	except:
+		print ('Fail!!')
+		activeRetrieveFlag = False
+	s.close()
 
-
-
-	print ('\033[92m\033[1m########### passive mode STOR ###########\033[0m')
+	print ('\033[92m\033[1m########### passive mode STOR ###########\033[0m') # PASSIVE UPLOAD
 	print ('upload client_file1.pdf as from_client1.pdf')
-# pasv & stor
 	passiveStoreFlag = True
-	for name in	sockets:
-		try:
-			s = pasv(sockets[name])
-			time.sleep(1)
-			sockets[name].send('STOR from_client1.pdf' + '\r\n')
-			testFile = file(client_home + 'client_file1.pdf')
-			while True:
-				data = testFile.read(size)
-				if(data):
-					s.send(data)
-				else:
-					break
-			print (sockets[name].recv(size))
-			testFile.close()
-			s.close()
-			print (sockets[name].recv(size)	  )
-		except:
-			print ('Fail!!')
-			passiveStoreFlag = False	  
-		break	# test once
+	try:
+		s = pasv(server_socket)
+		time.sleep(1)
+		server_socket.send('STOR from_client1.pdf' + '\r\n')
+		testFile = file(client_home + 'client_file1.pdf')
+		while True:
+			data = testFile.read(size)
+			if(data):
+				s.send(data)
+			else:
+				break
+		print (server_socket.recv(size))
+		testFile.close()
+		s.close()
+		print (server_socket.recv(size)	  )
+	except:
+		print ('Fail!!')
+		passiveStoreFlag = False
 
 
-	print ('\033[92m\033[1m########### passive mode RETR ###########\033[0m')
+	print ('\033[92m\033[1m########### passive mode RETR ###########\033[0m') # PASSIVE DOWNLOAD
 	print ('download server_file1.pdf as from_server1.pdf')
-# pasv & retr
 	passiveRetrieveFlag = True
-	for name in sockets:
-		try:
-			s = pasv(sockets[name])
-			time.sleep(1)
-			sockets[name].send('RETR server_file1.pdf' + '\r\n')
-			testFile = open(client_home + 'from_server1.pdf', 'w')
-			while True:
-				data = s.recv(size)
-				if(data):
-					testFile.write(data)
-				else:
-					break
-			print (sockets[name].recv(size))
-			testFile.close()
-			s.close()
-		except:
-			print ('Fail!!')
-			passiveRetrieveFlag = False
-		break	# test once
+	try:
+		s = pasv(server_socket)
+		time.sleep(1)
+		server_socket.send('RETR server_file1.pdf' + '\r\n')
+		testFile = open(client_home + 'from_server1.pdf', 'w')
+		while True:
+			data = s.recv(size)
+			if(data):
+				testFile.write(data)
+			else:
+				break
+		print (server_socket.recv(size))
+		testFile.close()
+		s.close()
+	except:
+		print ('Fail!!')
+		passiveRetrieveFlag = False
 
-	print ('\033[92m\033[1m########### files compare ###########\033[0m'	)
-# file comapre
+	print ('\033[92m\033[1m########### files compare ###########\033[0m') # CHECK FILES
 	fileCompareFlag = True
 
 	try:
@@ -286,12 +259,43 @@ if __name__ == '__main__' :
 		else:
 			print ('server_file1.pdf transfer failed')
 			fileCompareFlag = False
-
 	except:
 		print ('A file cant be opened.')
 
+	print ('\033[92m\033[1m########### delete files ###########\033[0m') # DELETE FILE
+	deleteFlag = True
+	server_socket.send('DELE to_rm\r\n')
+	print ('try: delete \'to_rm\'')
+	data = server_socket.recv(size)
+	print (data[0:-2])
+	if data[0] != '2':
+		deleteFlag = False
+		print ('Failed')
+	else:
+		print ('Delete Success')
+
+	server_socket.send('DELE idontexist\r\n')
+	print ('try: delete idontexist')
+	data = server_socket.recv(size)
+	print (data[0:-2])
+	if data[0] == '2':
+		deleteFlag = False
+		print ('Succes (unexpected)')
+	else:
+		print ('Failed (expected)')
+
+	server_socket.send('DELE /tests/server_files/to_rm2\r\n')
+	print ('try: delete /tests/server_files/to_rm2')
+	data = server_socket.recv(size)
+	print (data[0:-2])
+	if data[0] != '2':
+		deleteFlag = False
+		print ('Failed')
+	else:
+		print ('Delete Success')
+
 	print ('')
-	print ('\033[92m\033[1m########### Summary ###########\033[0m')
+	print ('\033[92m\033[1m########### Summary ###########\033[0m') # SUMMARY
 
 	summary('authentication', authenticationFlag)
 	summary('LIST', listFlag)
@@ -300,4 +304,5 @@ if __name__ == '__main__' :
 	summary('passive mode upload', passiveStoreFlag)
 	summary('passive mode download', passiveRetrieveFlag)
 	summary('file comapre', fileCompareFlag)
-	sockets[name].close()
+	time.sleep(1)
+	server_socket.close() # Close connection
