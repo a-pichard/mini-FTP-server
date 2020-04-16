@@ -8,6 +8,7 @@ def active_upload(server_socket, client_home, clientAddress, size):
     s = port(server_socket, clientAddress, size)
     time.sleep(1)
     server_socket.send('STOR from_client.txt' + '\r\n')
+    print (server_socket.recv(size))
     try:
     	connect, _ = s.accept()
     	testFile = file(client_home + '/client_file.txt')
@@ -17,7 +18,6 @@ def active_upload(server_socket, client_home, clientAddress, size):
     			connect.send(data)
     		else:
     			break
-    	print (server_socket.recv(size))
     	testFile.close()
     	connect.close()
     	print (server_socket.recv(size))
@@ -34,6 +34,7 @@ def active_download(server_socket, client_home, clientAddress, size):
     s = port(server_socket, clientAddress, size)
     time.sleep(1)
     server_socket.send('RETR server_file.txt' + '\r\n')
+    print (server_socket.recv(size))
     try:
         connect, _ = s.accept()
         testFile = open(client_home + '/from_server.txt', 'w')
@@ -60,6 +61,7 @@ def passive_upload(server_socket, client_home, size):
     	s = pasv(server_socket, size)
     	time.sleep(1)
     	server_socket.send('STOR from_client1.pdf' + '\r\n')
+    	print (server_socket.recv(size))
     	testFile = file(client_home + 'client_file1.pdf')
     	while True:
     		data = testFile.read(size)
@@ -67,7 +69,6 @@ def passive_upload(server_socket, client_home, size):
     			s.send(data)
     		else:
     			break
-    	print (server_socket.recv(size))
     	testFile.close()
     	s.close()
     	print (server_socket.recv(size))
@@ -84,6 +85,7 @@ def passive_download(server_socket, client_home, size):
     	s = pasv(server_socket, size)
     	time.sleep(1)
     	server_socket.send('RETR server_file1.pdf' + '\r\n')
+        print (server_socket.recv(size))
     	testFile = open(client_home + 'from_server1.pdf', 'w')
     	while True:
     		data = s.recv(size)
