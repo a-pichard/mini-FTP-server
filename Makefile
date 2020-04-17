@@ -63,7 +63,6 @@ fclean:	clean
 re:	fclean all
 
 tests_run: clean
-	mkdir tests/client_files tests/server_files; echo ""
 	cp tests/transfer_files_test/client* tests/client_files
 	cp tests/transfer_files_test/server* tests/server_files
 	cp tests/transfer_files_test/to_rm* tests/server_files
