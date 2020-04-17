@@ -18,7 +18,7 @@ static int get_file_fd(client_t *client, const char *data)
     char okmsg[] = "150 Opening BINARY mode data connection.\r\n";
 
     if (data == NULL) {
-        write_q(client, "500 Missing file path.\r\n", false);
+        write_q(client, "550 Missing file path.\r\n", false);
         return (-1);
     }
     if (client->mode == NOMODE || client->data_fd == -1) {
@@ -83,7 +83,7 @@ void stor(client_t *client, char *data)
     } else {
         free(data);
         if (receive_data(client, file_fd) == false) {
-            respond_to(client->fd, "500 Something went wrong.\r\n");
+            respond_to(client->fd, "550 Something went wrong.\r\n");
         } else {
             respond_to(client->fd, "226 Closing data connection.\r\n");
         }

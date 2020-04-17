@@ -53,5 +53,5 @@ void dele(client_t *c, char *data)
     if (ret == 0)
         write_q(c, "250 Requested file action okay, completed.\r\n", false);
     else
-        write_q(c, "550 Unable to delete file", false);
+        write_q(c, "550 Unable to delete file\r\n", false);
 }
