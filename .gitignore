@@ -8,6 +8,7 @@ tests/client_files/*.txt
 tests/client_files/*.pdf
 tests/server_files/*.txt
 tests/server_files/*.pdf
+tests/server_files/to_rm*
 *.gcda
 *.gcno
 unit_tests
