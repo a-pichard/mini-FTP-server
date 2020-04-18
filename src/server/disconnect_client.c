@@ -41,7 +41,6 @@ static void destroy_client(client_t *client)
     destroy_write_q(client->write_q);
 }
 
-
 static bool empty(server_t *server)
 {
     if (server->nb_client == 0) {
