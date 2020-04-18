@@ -74,7 +74,7 @@ tests_run: clean
 	cp tests/transfer_files_test/client* tests/client_files
 	cp tests/transfer_files_test/server* tests/server_files
 	cp tests/transfer_files_test/to_rm* tests/server_files
-	gcc -o $(TEST_NAME) $(SRC) --coverage $(CFLAGS)
+	gcc -o $(TEST_NAME) $(SRC) $(SRC_NBONUS) --coverage $(CFLAGS)
 	tests/run_tests.sh
 
 bonus:	$(OBJ) $(OBJ_BONUS)
