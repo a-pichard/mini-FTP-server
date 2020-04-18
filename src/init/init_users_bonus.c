@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 static char *get_file(const char *path)
 {

@@ -41,7 +41,15 @@ SRC	=	src/main.c	\
 		src/cmd/syst.c	\
 		src/cmd/type.c
 
+SRC_NBONUS	=	src/init/init_users.c
+
+SRC_BONUS	=	src/init/init_users_bonus.c
+
 OBJ	=	$(SRC:.c=.o)
+
+OBJ_NBONUS	=	$(SRC_NBONUS:.c=.o)
+
+OBJ_BONUS	=	$(SRC_BONUS:.c=.o)
 
 CFLAGS	=	-Iincl -Wall -Wextra
 
@@ -51,8 +59,8 @@ TEST_NAME	=	unit_tests
 
 all:	$(NAME)
 
-$(NAME):	$(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CFLAGS)
+$(NAME):	$(OBJ) $(OBJ_NBONUS)
+	gcc -o $(NAME) $(OBJ) $(OBJ_NBONUS) $(CFLAGS)
 
 clean:
 	rm -f $(OBJ) *.gc* tests/client_files/* tests/server_files/*
@@ -69,9 +77,7 @@ tests_run: clean
 	gcc -o $(TEST_NAME) $(SRC) --coverage $(CFLAGS)
 	tests/run_tests.sh
 
-bonus:
-	make -C ./bonus
-	cp ./bonus/myftp .
-	make -C ./bonus fclean
+bonus:	$(OBJ) $(OBJ_BONUS)
+	gcc -o $(NAME) $(OBJ) $(OBJ_BONUS) $(CFLAGS)
 
 .PHONY:	all clean fclean re tests_run bonus
