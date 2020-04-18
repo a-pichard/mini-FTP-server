@@ -68,3 +68,10 @@ tests_run: clean
 	cp tests/transfer_files_test/to_rm* tests/server_files
 	gcc -o $(TEST_NAME) $(SRC) --coverage $(CFLAGS)
 	tests/run_tests.sh
+
+bonus:
+	make -C ./bonus
+	cp ./bonus/myftp .
+	make -C ./bonus fclean
+
+.PHONY:	all clean fclean re tests_run bonus
