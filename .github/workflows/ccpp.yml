@@ -17,5 +17,3 @@ jobs:
       run: make
     - name: make tests
       run: make tests_run
-    - name: convergae
-      run: gcovr
