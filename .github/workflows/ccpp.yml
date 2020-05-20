@@ -8,12 +8,14 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: build
       run: make
-    - name: make tests
-      run: make tests_run
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v2
+      - name: criterion tests
+        run: make tests_run
