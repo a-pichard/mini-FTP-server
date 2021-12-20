@@ -19,16 +19,23 @@ mini-FTP-server is an EPITECH (TECH2) project written in C. The project aim to r
 
 # Install and run myftp
 
-* Clone the project
-* cd mini-FTP-server
-* make
-* ./myftp port path
+First, clone the project.
+
+```bash
+$ cd mini-FTP-server
+$ make
+$ ./myftp port path
+```
 
 # Bonus
-* make bonus
+```bash
+$ make bonus
+```
 
 # Tests
-* make tests_run
+```bash
+$ make tests_run
+```
 
 # Contributors
 * Adrien PICHARD
