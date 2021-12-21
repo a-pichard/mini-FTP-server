@@ -4,21 +4,30 @@ import time
 def listftp(server_socket, clientAddress, size):
 	print ('\n\033[92m\033[1m########### active mode LIST ###########\033[0m') # ACTIVE LIST
 	listFlag = True
+
 	s = port(server_socket, clientAddress, size)
-	time.sleep(1)	
-	server_socket.send(('LIST\r\n').encode())
+	time.sleep(1)
+
+	cmd = 'LIST\r\n'
+	server_socket.send(cmd.encode())
 	try:
 		connect, _ = s.accept()
+
 		time.sleep(1)
-		data = connect.recv(size)
+		resp = connect.recv(size).decode()
+
 		print ('LIST format:')
 		print ('------------------------------------')
-		print (data)
+		print (resp)
 		print ('------------------------------------')
-		print (server_socket.recv(size))
+
+		resp = connect.recv(size).decode()
+		print (resp)
+
 		connect.close()
-	except e:
+	except:
 		print ('Fail!!')
 		listFlag = False
 	s.close()
+
 	return listFlag
