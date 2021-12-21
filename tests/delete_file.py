@@ -1,31 +1,31 @@
 def delete_file(server_socket, size):
     print ('\033[92m\033[1m########### delete files ###########\033[0m') # DELETE FILE
     deleteFlag = True
-    server_socket.send('DELE to_rm\r\n')
+    server_socket.send(('DELE to_rm\r\n').encode())
     print ('try: delete \'to_rm\'')
-    data = server_socket.recv(size)
+    data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] != '2':
-    	deleteFlag = False
-    	print ('Failed')
+        deleteFlag = False
+        print ('Failed')
     else:
-    	print ('Delete Success')
-    server_socket.send('DELE idontexist\r\n')
+        print ('Delete Success')
+    server_socket.send(('DELE idontexist\r\n').encode())
     print ('try: delete idontexist')
-    data = server_socket.recv(size)
+    data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] == '2':
-    	deleteFlag = False
-    	print ('Succes (unexpected)')
+        deleteFlag = False
+        print ('Succes (unexpected)')
     else:
-    	print ('Failed (expected)')
-    server_socket.send('DELE /tests/server_files/to_rm2\r\n')
+        print ('Failed (expected)')
+    server_socket.send(('DELE /tests/server_files/to_rm2\r\n').encode())
     print ('try: delete /tests/server_files/to_rm2')
-    data = server_socket.recv(size)
+    data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] != '2':
-    	deleteFlag = False
-    	print ('Failed')
+        deleteFlag = False
+        print ('Failed')
     else:
-    	print ('Delete Success')
+        print ('Delete Success')
     return deleteFlag

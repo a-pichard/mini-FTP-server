@@ -3,11 +3,12 @@ def auth(server_socket, name, passwd, size):
     print ('name:', name, 'password:', passwd)
 
     server_socket.recv(size)
-    server_socket.send('USER ' + name + '\r\n')
+    server_socket.send(('USER ' + name + '\r\n').encode())
     server_socket.recv(size)
-    server_socket.send('PASS ' + passwd + '\r\n')
-    data = server_socket.recv(size)
+    server_socket.send(('PASS ' + passwd + '\r\n').encode())
+    data = server_socket.recv(size).decode()
     print (name, '[', data[0:-2], ']')
     if not data:
-    	data = ' '
+        data = ' '
+
     return data[0] == '2'

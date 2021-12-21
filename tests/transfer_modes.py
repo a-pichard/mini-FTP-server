@@ -9,15 +9,16 @@ def port(controlSocket, clientAddress, size):
 	s.bind( (clientAddress, clientPort))
 	s.listen(1)
 
-	command = "PORT " + clientAddress.replace('.',',') + ',' + str(clientPort/256) + ',' + str(clientPort%256)
-	controlSocket.send(command + '\r\n')
-	print (controlSocket.recv(size))
+	command = "PORT " + clientAddress.replace('.',',') + ',' + str(int(clientPort/256)) + ',' + str(clientPort%256)
+	controlSocket.send((command + '\r\n').encode())
+	print (str(controlSocket.recv(size)))
 	return s
 
 
 def pasv(controlSocket, size):
-	controlSocket.send('PASV' + '\r\n')
+	controlSocket.send(('PASV' + '\r\n').encode())
 	data = controlSocket.recv(size)
+	data = str(data)
 	print (data)
 	pattern = '([0-9 ]+),([0-9 ]+),([0-9 ]+),([0-9 ]+),([0-9 ]+),([0-9 ]+)'
 	match = re.findall(pattern, data)

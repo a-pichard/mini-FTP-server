@@ -7,23 +7,23 @@ def active_upload(server_socket, client_home, clientAddress, size):
     activeStoreFlag = True
     s = port(server_socket, clientAddress, size)
     time.sleep(1)
-    server_socket.send('STOR from_client.txt' + '\r\n')
+    server_socket.send(('STOR from_client.txt' + '\r\n').encode())
     print (server_socket.recv(size))
     try:
-    	connect, _ = s.accept()
-    	testFile = file(client_home + '/client_file.txt')
-    	while True:
-    		data = testFile.read(size)
-    		if(data):
-    			connect.send(data)
-    		else:
-    			break
-    	testFile.close()
-    	connect.close()
-    	print (server_socket.recv(size))
+        connect, _ = s.accept()
+        testFile = open(client_home + '/client_file.txt')
+        while True:
+            data = testFile.read(size)
+            if(data):
+                connect.send(data.encode())
+            else:
+                break
+        testFile.close()
+        connect.close()
+        print (server_socket.recv(size))
     except:
-    	print ('Fail!!')
-    	activeStoreFlag = False
+        print ('Fail!!')
+        activeStoreFlag = False
     s.close()
     return activeStoreFlag
 		
@@ -33,11 +33,11 @@ def active_download(server_socket, client_home, clientAddress, size):
     activeRetrieveFlag = True
     s = port(server_socket, clientAddress, size)
     time.sleep(1)
-    server_socket.send('RETR server_file.txt' + '\r\n')
+    server_socket.send(('RETR server_file.txt' + '\r\n').encode())
     print (server_socket.recv(size))
     try:
         connect, _ = s.accept()
-        testFile = open(client_home + '/from_server.txt', 'w')
+        testFile = open(client_home + '/from_server.txt', 'wb')
         while True:
             data = connect.recv(size)
             if(data):
@@ -58,23 +58,24 @@ def passive_upload(server_socket, client_home, size):
     print ('upload client_file1.pdf as from_client1.pdf')
     passiveStoreFlag = True
     try:
-    	s = pasv(server_socket, size)
-    	time.sleep(1)
-    	server_socket.send('STOR from_client1.pdf' + '\r\n')
-    	print (server_socket.recv(size))
-    	testFile = file(client_home + 'client_file1.pdf')
-    	while True:
-    		data = testFile.read(size)
-    		if(data):
-    			s.send(data)
-    		else:
-    			break
-    	testFile.close()
-    	s.close()
-    	print (server_socket.recv(size))
-    except:
-    	print ('Fail!!')
-    	passiveStoreFlag = False
+        s = pasv(server_socket, size)
+        time.sleep(1)
+        server_socket.send(('STOR from_client1.pdf' + '\r\n').encode())
+        print (server_socket.recv(size))
+        testFile = open(client_home + 'client_file1.pdf', 'rb')
+        while True:
+            data = testFile.read(size)
+            if(data):
+                s.send(data)
+            else:
+                break
+        testFile.close()
+        s.close()
+        print (server_socket.recv(size))
+    except e:
+        print(e)
+        print ('Fail!!')
+        passiveStoreFlag = False
     return passiveStoreFlag
 
 def passive_download(server_socket, client_home, size):
@@ -84,9 +85,9 @@ def passive_download(server_socket, client_home, size):
     try:
         s = pasv(server_socket, size)
         time.sleep(1)
-        server_socket.send('RETR server_file1.pdf' + '\r\n')
+        server_socket.send(('RETR server_file1.pdf' + '\r\n').encode())
         print (server_socket.recv(size))
-        testFile = open(client_home + 'from_server1.pdf', 'w')
+        testFile = open(client_home + 'from_server1.pdf', 'wb')
         while True:
             data = s.recv(size)
             if(data):
@@ -97,6 +98,6 @@ def passive_download(server_socket, client_home, size):
         testFile.close()
         s.close()
     except:
-    	print ('Fail!!')
-    	passiveRetrieveFlag = False
+        print ('Fail!!')
+        passiveRetrieveFlag = False
     return passiveRetrieveFlag

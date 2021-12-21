@@ -64,7 +64,7 @@ if __name__ == '__main__' :
 	summary('active mode download', activeRetrieveFlag)
 	summary('passive mode upload', passiveStoreFlag)
 	summary('passive mode download', passiveRetrieveFlag)
-	summary('file comapre', fileCompareFlag)
+	summary('file compare', fileCompareFlag)
 	summary('delete file', deleteFlag)
 	summary('buffer', bufferFlag)
 	time.sleep(1)
