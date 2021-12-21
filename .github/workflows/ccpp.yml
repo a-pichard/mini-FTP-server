@@ -20,4 +20,4 @@ jobs:
       - name: functional tests
         run: make tests_run
       - name: Coverage
-        run: gcovr
+        run: apt install -y gcovr && gcovr
