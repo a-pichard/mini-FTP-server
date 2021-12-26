@@ -1,6 +1,6 @@
 def delete_file(server_socket, size):
     print ('\033[92m\033[1m########### delete files ###########\033[0m') # DELETE FILE
-    deleteFlag = True
+    delete_flag = True
 
     cmd = 'DELE to_rm\r\n'
     print ('try: \"DELE to_rm\"')
@@ -8,7 +8,7 @@ def delete_file(server_socket, size):
     data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] != '2':
-        deleteFlag = False
+        delete_flag = False
         print ('Failed')
     else:
         print ('Delete Success')
@@ -19,7 +19,7 @@ def delete_file(server_socket, size):
     data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] == '2':
-        deleteFlag = False
+        delete_flag = False
         print ('Succes (unexpected)')
     else:
         print ('Failed (expected)')
@@ -30,9 +30,9 @@ def delete_file(server_socket, size):
     data = server_socket.recv(size).decode()
     print (data[0:-2])
     if data[0] != '2':
-        deleteFlag = False
+        delete_flag = False
         print ('Failed')
     else:
         print ('Delete Success')
 
-    return deleteFlag
+    return delete_flag

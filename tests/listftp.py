@@ -3,7 +3,7 @@ import time
 
 def listftp(server_socket, clientAddress, size):
 	print ('\n\033[92m\033[1m########### active mode LIST ###########\033[0m') # ACTIVE LIST
-	listFlag = True
+	list_flag = True
 
 	s = port(server_socket, clientAddress, size)
 	time.sleep(1)
@@ -27,7 +27,7 @@ def listftp(server_socket, clientAddress, size):
 		connect.close()
 	except:
 		print ('Fail!!')
-		listFlag = False
+		list_flag = False
 	s.close()
 
-	return listFlag
+	return list_flag

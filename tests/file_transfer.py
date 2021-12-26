@@ -3,7 +3,7 @@ import time
 
 def active_upload(server_socket, client_home, clientAddress, size):
     print ('\033[92m\033[1m########### active mode STOR ###########\033[0m') # ACTIVE UPLOAD
-    activeStoreFlag = True
+    activeStore_flag = True
 
     print ('upload client_file.txt as from_client.txt')
 
@@ -31,14 +31,14 @@ def active_upload(server_socket, client_home, clientAddress, size):
         print (resp)
     except:
         print ('Fail!!')
-        activeStoreFlag = False
+        activeStore_flag = False
     s.close()
 
-    return activeStoreFlag
+    return activeStore_flag
 		
 def active_download(server_socket, client_home, clientAddress, size):
     print ('\n\033[92m\033[1m########### active mode RETR ###########\033[0m') # ACTIVE DOWNLOAD
-    activeRetrieveFlag = True
+    activeRetrieve_flag = True
 
     print ('download server_file.txt as from_server.txt')
 
@@ -66,14 +66,14 @@ def active_download(server_socket, client_home, clientAddress, size):
         connect.close()
     except:
         print ('Fail!!')
-        activeRetrieveFlag = False
+        activeRetrieve_flag = False
     s.close()
 
-    return activeRetrieveFlag
+    return activeRetrieve_flag
 
 def passive_upload(server_socket, client_home, size):
     print ('\033[92m\033[1m########### passive mode STOR ###########\033[0m') # PASSIVE UPLOAD
-    passiveStoreFlag = True
+    passiveStore_flag = True
 
     print ('upload client_file1.pdf as from_client1.pdf')
 
@@ -103,13 +103,13 @@ def passive_upload(server_socket, client_home, size):
         print (resp)
     except:
         print ('Fail!!')
-        passiveStoreFlag = False
+        passiveStore_flag = False
 
-    return passiveStoreFlag
+    return passiveStore_flag
 
 def passive_download(server_socket, client_home, size):
     print ('\033[92m\033[1m########### passive mode RETR ###########\033[0m') # PASSIVE DOWNLOAD
-    passiveRetrieveFlag = True
+    passiveRetrieve_flag = True
     
     print ('download server_file1.pdf as from_server1.pdf')
     
@@ -139,6 +139,6 @@ def passive_download(server_socket, client_home, size):
         s.close()
     except:
         print ('Fail!!')
-        passiveRetrieveFlag = False
+        passiveRetrieve_flag = False
 
-    return passiveRetrieveFlag
+    return passiveRetrieve_flag

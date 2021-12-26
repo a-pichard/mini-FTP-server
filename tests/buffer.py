@@ -1,6 +1,6 @@
 def buffer(server_socket, size):
     print ('\033[92m\033[1m########### Buffer ###########\033[0m') # Buffer
-    bufferFlag = True
+    buffer_flag = True
 
     server_socket.send(('P').encode())
     server_socket.send(('WD').encode())
@@ -11,9 +11,9 @@ def buffer(server_socket, size):
 
     print (data[0:-2])
     if data[0] != '2':
-        bufferFlag = False
+        buffer_flag = False
         print ('Failed')
     else:
         print ('Buffer ok')
 
-    return bufferFlag
+    return buffer_flag
